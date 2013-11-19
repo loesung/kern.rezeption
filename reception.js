@@ -7,12 +7,19 @@
 require('./lib/baum.js');
 CONFIG = $.config.createConfig('./config/');
 
-function errorWriter(e, code){
+outputError = function(e, code, message){
     var output
-        = '<html><head><title>' 
-        + CONFIG.get('site-name') 
-        + '</title></head><body>'
-        + '<h3>' + code + ' ' + $.nodejs.http.STATUS_CODES[code] + '</h3>'
+        = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
+        + '<html><head>'
+        + '<meta http-equiv="Content-Type" content="application/html; charset=utf-8" />'
+        + '<title>' + CONFIG.get('site-name') + '</title>'
+        + '<style type="text/css">body{text-align:center;}</style>'
+        + '</head><body>'
+        + '<h1>' + $.nodejs.http.STATUS_CODES[code] + '</h1>'
+        + '<h3>Error Code ' + code + '</h3>'
+        + ((undefined == message)?('Sorry, but the server have responsed with an error. This is what we all know.'):(message))
+        + '<br /><hr />'
+        + '<font color="#FF0000">LOESUNG-PROJECT</font> Reception Server'
         + '</body></html>'
     ;
     e.response.writeHead(code);
@@ -20,28 +27,13 @@ function errorWriter(e, code){
     e.response.end();
 };
 
-var routerTable = {
-    
-};
 
+
+var site = require('./site/entrance.js');
 var port = CONFIG.get('http-port');
+
 var HTTPServer = $.net.HTTP.server(port);
 console.log('HTTP Server created at port: ' + port);
 
-HTTPServer.on('data', function(e){
-    var handled = false;
-    for(var expression in routerTable){
-        var regexp = new RegExp(expression);
-        var result = regexp.exec(e.response.url);
-        if(null != result){
-            routerTable[expression](e, result);
-            handled = true;
-        };
-    };
-
-    if(!handled){
-        errorWriter(e, 404);
-    };
-});
-
+HTTPServer.on('data', site);
 HTTPServer.start();
