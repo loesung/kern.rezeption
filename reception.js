@@ -13,7 +13,7 @@ outputError = function(e, code, message){
         + '<html><head>'
         + '<meta http-equiv="Content-Type" content="application/html; charset=utf-8" />'
         + '<title>' + CONFIG.get('site-name') + '</title>'
-        + '<style type="text/css">body{text-align:center;}</style>'
+        + '<style type="text/css">body{background: #FFFFFF; text-align:center;}</style>'
         + '</head><body>'
         + '<h1>' + $.nodejs.http.STATUS_CODES[code] + '</h1>'
         + '<h3>Error Code ' + code + '</h3>'
