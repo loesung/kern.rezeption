@@ -1,5 +1,7 @@
 [
     {"name":"http-port", "default":"80"},
 
-    {"name":"site-name", "default":"LOESUNG - 机要核心"}
+    {"name":"site-name", "default":"LOESUNG - 机要核心"},
+
+    {"name":"ipc-map", "type":"json"}
 ]

@@ -6,6 +6,8 @@
 
 require('./lib/baum.js');
 CONFIG = $.config.createConfig('./config/');
+SESSION = {};
+IPC = {};
 
 outputError = function(e, code, message){
     var output
@@ -34,6 +36,17 @@ var port = CONFIG.get('http-port');
 
 var HTTPServer = $.net.HTTP.server(port);
 console.log('HTTP Server created at port: ' + port);
+
+console.log('Read IPC map.');
+var IPCMap = CONFIG.get('ipc-map');
+for(var item in IPCMap){
+    console.log(
+        'Create IPC Client at ['
+        + IPCMap[item]
+        + '] for [' + item + '].'
+    );
+    IPC[item] = $.net.IPC.client(IPCMap[item]);
+};
 
 HTTPServer.on('data', site);
 HTTPServer.start();

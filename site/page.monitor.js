@@ -1,5 +1,5 @@
 function queryState(callback){
-    
+    callback({});
 };
 
 module.exports = function(e, matchResult){
