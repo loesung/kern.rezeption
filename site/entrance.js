@@ -7,11 +7,17 @@ var emergency_button = function(){
 };
 
 outputPage = function(e, data){
-    var navigate_link = function(name, target){
+    function navigate_link(name, target){
         if(e.url.pathname == target)
-            return '<div class="navbutton btn-active">' + name + '</div>';
+            return ('<div class="navbutton btn-active">' + name + '</div>');
         else
-            return '<div class="navbutton btn-normal"><a href="' + target + '?_' + (new Date().getTime()) + '" target="_blank">' + name + '</a></div>';
+            return ('<div class="navbutton btn-normal"><a href="' + target + '?_' + (new Date().getTime()) + '" target="_blank">' + name + '</a></div>');
+    };
+    function section(name, content){
+        return (
+            '<div class="bar">' + name + '</div>'
+            + '<div>' + content + '</div>'
+        );
     };
     var menu
         = navigate_bar()
@@ -24,7 +30,6 @@ outputPage = function(e, data){
         + navigate_bar()
         + navigate_link('系统日志', '/log')
         + navigate_link('系统状态监视器', '/monitor')
-
     ;
 
     var output    
@@ -34,6 +39,7 @@ outputPage = function(e, data){
         + ((undefined == data['head'])?'':data['head'])
         + '<style type="text/css">'
             + 'body{background: #FFFFFF;}'
+            + 'a img{border: 0px}'
             + '.fullWidth{width: 99%;}'
             + '.btn-active{background: #DDDDFF; border: #BBBBCC 2px solid}'
             + '.btn-normal{background: #3333CC;}'
@@ -41,9 +47,10 @@ outputPage = function(e, data){
             + '.btn-normal a{color: #FFFFFF; text-decoration:none}'
             + '.btn-active a{color: #000000; text-decoration:none; font-weight: bold}'
             + '.navbar{padding-top: 7px;}'
-            + '.rightLine{border-left:#CCCCCC 1px solid;}'
+            + '.leftLine{border-left:#CCCCCC 1px solid;}'
             + '.bottomLine{border-bottom:#CCCCCC 1px solid;}'
             + '.topLine{border-top:#CCCCCC 1px solid;}'
+            + '.bar{font-weight: bold; background: #3333CC; color: #FFFFFF; padding: 5px;}'
             + '#hidden{display: none}'
         + '</style>'
         + '</head><body>'
@@ -58,17 +65,18 @@ outputPage = function(e, data){
               + menu 
 //              + emergency_button() 
               + '</td>'
-            + '<td class="rightLine">'
-              +'<table class="fullWidth">'
+            + '<td class="leftLine">'
+              + section('系统控制', 
+                  '<table class="fullWidth">'
                 + '<tr valign="bottom"><td>'
-                  + '<strong>请务必启用图片！否则您可能看不到紧急按钮！</strong><br />'
-                  + '<a href="' + e.url.pathname + '?_=' + (new Date().getTime()) + '">刷新页面</a>'
+                + '<strong>请务必启用图片！否则您可能看不到紧急按钮！</strong><br />'
+                + '<a href="' + e.url.pathname + '?_=' + (new Date().getTime()) + '">刷新页面</a>'
                 + '</td>'
                 + '<td width="20%" align="right">' + emergency_button() + '</td>'
-                + '</tr><tr><td colspan="2" class="topLine">'
-                  + data['content']
-                + '</td></tr>'
-              +'</table>'
+                + '</tr>'
+                +'</table>'
+              )
+              + section(('当前位置：' + data['title']), data['content'])
             + '</td>'
           + '</tr>'
         + '</table>'
