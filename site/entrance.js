@@ -8,11 +8,10 @@ var emergency_button = function(){
 
 outputPage = function(e, data){
     var navigate_link = function(name, target){
-        console.log(e.url.pathname, target);
         if(e.url.pathname == target)
-            return '<div class="navbutton btn-active"><a href="' + target + '" target="_blank">' + name + '</a></div>';
+            return '<div class="navbutton btn-active">' + name + '</div>';
         else
-            return '<div class="navbutton btn-normal"><a href="' + target + '" target="_blank">' + name + '</a></div>';
+            return '<div class="navbutton btn-normal"><a href="' + target + '?_' + (new Date().getTime()) + '" target="_blank">' + name + '</a></div>';
     };
     var menu
         = navigate_bar()
@@ -84,6 +83,8 @@ outputPage = function(e, data){
 
 var routerTable = {
     '^\/(\\?.+)?$': require('./page.index.js'),
+    '^\/monitor\/?(\\?.+)?$': require('./page.monitor.js'),
+
     '^\/static\/([0-9a-zA-Z\.\-]+)$': require('./page.static.js'),
 };
 
