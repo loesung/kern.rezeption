@@ -17,12 +17,12 @@ outputError = function(e, code, message){
         + '</head><body>'
         + '<h1>' + $.nodejs.http.STATUS_CODES[code] + '</h1>'
         + '<h3>Error Code ' + code + '</h3>'
-        + ((undefined == message)?('Sorry, but the server have responsed with an error. This is what we all know.'):(message))
+        + ((undefined == message)?('Sorry, but the server have respond with an error. This is what we all know.'):(message))
         + '<br /><hr />'
         + '<font color="#FF0000">LOESUNG-PROJECT</font> Reception Server'
         + '</body></html>'
     ;
-    e.response.writeHead(code);
+    e.response.writeHead(code, {'Content-Type': 'text/html'});
     e.response.write(output);
     e.response.end();
 };

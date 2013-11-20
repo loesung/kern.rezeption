@@ -1,9 +1,8 @@
 module.exports = function(e, matchResult){
     outputPage(e, {
         title: '主页',
-        content:
-            '<h1>' + '主页' + '</h1>'
-            + '<br /><hr />'
-            + '<font color="#FF0000">LOESUNG-PROJECT</font> Reception Server',
+        content
+            : '欢迎使用。当前系统有N条新信息。'
+        ,
     });
 };
