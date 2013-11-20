@@ -2,8 +2,10 @@ var navigate_bar = function(){
     return '<div class="navbar"></div>';
 };
 
-var emergency_button = function(){
-    return '<a href="/stop"><img src="/static/stop.png" alt="紧急锁定按钮" width="200" height="108"></a>';
+var emergency_button = function(width){
+    if(undefined == width) width = 200;
+    var height = 108 * width / 200;
+    return '<a href="/stop"><img src="/static/stop.png" alt="紧急锁定按钮" width="' + width + '" height="' + height + '"></a>';
 };
 
 outputPage = function(e, data){
@@ -31,6 +33,8 @@ outputPage = function(e, data){
         + navigate_link('系统日志', '/log')
         + navigate_link('系统状态监视器', '/monitor')
     ;
+
+    var sidebarWidth = 120;
 
     var output    
         = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
@@ -60,10 +64,10 @@ outputPage = function(e, data){
                         // very practical way to display on a damnly small
                         // browser like Dillo.
           + '<tr valign="top">'
-            + '<td width="15%">'
-              + '<img src="/static/logo.png" width="200" height="133">' 
+            + '<td width="5%">'
+              + '<img src="/static/logo.png" width="' + sidebarWidth + '" height="' + 106 * sidebarWidth / 160 + '">' 
               + menu 
-//              + emergency_button() 
+              + emergency_button(sidebarWidth) 
               + '</td>'
             + '<td class="leftLine">'
               + section('系统控制', 
@@ -72,7 +76,7 @@ outputPage = function(e, data){
                 + '<strong>请务必启用图片！否则您可能看不到紧急按钮！</strong><br />'
                 + '<a href="' + e.url.pathname + '?_=' + (new Date().getTime()) + '">刷新页面</a>'
                 + '</td>'
-                + '<td width="20%" align="right">' + emergency_button() + '</td>'
+                + '<td width="20%" align="right"></td>'// + emergency_button() + '</td>'
                 + '</tr>'
                 +'</table>'
               )
