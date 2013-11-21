@@ -13,13 +13,13 @@ outputPage = function(e, data){
     console.log(realPathname);
 
     function navigate_link(name, target){
+        var ret = '<form action="/' + (new Date().getTime()) + target + '">';
         if(realPathname == target)
-            return ('<button type="button" class="navbutton btn-active">' + name + '</button>');
+            ret += ('<button class="navbutton btn-active" type="submit">' + name + '</button>');
         else
-            return ('<form action="/' + (new Date().getTime()) + target + '">'
-                + '<button class="navbutton btn-normal" type="submit">' + name + '</button></form>'
-            );
-//            return ('<div class="navbutton btn-normal"><a href="' + target + '?_' + (new Date().getTime()) + '" target="_blank">' + name + '</a></div>');
+            ret += ('<button class="navbutton btn-normal" type="submit">' + name + '</button>');
+        ret += "</form>";
+        return ret;
     };
     function section(name, content){
         return (
@@ -101,6 +101,7 @@ outputPage = function(e, data){
 var routerTable = {
     '^(\/[0-9]+)?\/?\\??$': require('./page.index.js'),
     '^(\/[0-9]+)?\/monitor\/?\\??$': require('./page.monitor.js'),
+    '^(\/[0-9]+)?\/log\/?\\??$': require('./page.log.js'),
 
     '^\/static\/([0-9a-zA-Z\.\-]+)$': require('./page.static.js'),
 };
