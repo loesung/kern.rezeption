@@ -9,11 +9,17 @@ var emergency_button = function(width){
 };
 
 outputPage = function(e, data){
+    var realPathname = /^(\/[0-9]+)?(.+)$/.exec(e.url.pathname)[2];
+    console.log(realPathname);
+
     function navigate_link(name, target){
-        if(e.url.pathname == target)
-            return ('<div class="navbutton btn-active">' + name + '</div>');
+        if(realPathname == target)
+            return ('<button type="button" class="navbutton btn-active">' + name + '</button>');
         else
-            return ('<div class="navbutton btn-normal"><a href="' + target + '?_' + (new Date().getTime()) + '" target="_blank">' + name + '</a></div>');
+            return ('<form action="/' + (new Date().getTime()) + target + '">'
+                + '<button class="navbutton btn-normal" type="submit">' + name + '</button></form>'
+            );
+//            return ('<div class="navbutton btn-normal"><a href="' + target + '?_' + (new Date().getTime()) + '" target="_blank">' + name + '</a></div>');
     };
     function section(name, content){
         return (
@@ -45,12 +51,11 @@ outputPage = function(e, data){
             + 'body{background: #FFFFFF;}'
             + 'a img{border: 0px}'
             + '.fullWidth{width: 99%;}'
-            + '.btn-active{background: #DDDDFF; border: #BBBBCC 2px solid}'
-            + '.btn-normal{background: #3333CC;}'
-            + '.navbutton {margin: 2px; padding: 5px;}'
-            + '.btn-normal a{color: #FFFFFF; text-decoration:none}'
-            + '.btn-active a{color: #000000; text-decoration:none; font-weight: bold}'
-            + '.navbar{padding-top: 7px;}'
+            + '.navbutton {margin-bottom: 0px; padding: 0px; border: none; width: 100%}'
+            + '.btn-normal{background: #3333CC;color: #FFFFFF; text-decoration:none}'
+            + '.btn-active{background: #DDDDFF;color: #000000; text-decoration:none;}'
+            + '.navbar{padding-top: 1px;}'
+            + 'input[type="hidden"]{display: none}'
             + '.leftLine{border-left:#CCCCCC 1px solid;}'
             + '.bottomLine{border-bottom:#CCCCCC 1px solid;}'
             + '.topLine{border-top:#CCCCCC 1px solid;}'
@@ -74,7 +79,7 @@ outputPage = function(e, data){
                   '<table class="fullWidth">'
                 + '<tr valign="bottom"><td>'
                 + '<strong>请务必启用图片！否则您可能看不到紧急按钮！</strong><br />'
-                + '<a href="' + e.url.pathname + '?_=' + (new Date().getTime()) + '">刷新页面</a>'
+                + '<a href="/' + (new Date().getTime()) + realPathname + '">刷新页面</a>'
                 + '</td>'
                 + '<td width="20%" align="right"></td>'// + emergency_button() + '</td>'
                 + '</tr>'
@@ -94,8 +99,8 @@ outputPage = function(e, data){
 };
 
 var routerTable = {
-    '^\/(\\?.+)?$': require('./page.index.js'),
-    '^\/monitor\/?(\\?.+)?$': require('./page.monitor.js'),
+    '^(\/[0-9]+)?\/?\\??$': require('./page.index.js'),
+    '^(\/[0-9]+)?\/monitor\/?\\??$': require('./page.monitor.js'),
 
     '^\/static\/([0-9a-zA-Z\.\-]+)$': require('./page.static.js'),
 };
