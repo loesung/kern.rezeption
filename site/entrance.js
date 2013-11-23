@@ -79,7 +79,7 @@ outputPage = function(e, data){
                   '<table class="fullWidth">'
                 + '<tr valign="bottom"><td>'
                 + '<strong>请务必启用图片！否则您可能看不到紧急按钮！</strong><br />'
-                + '<a href="/' + (new Date().getTime()) + realPathname + '">刷新页面</a>'
+                + '页面产生于: ' + new Date() + ' <a href="/' + (new Date().getTime()) + realPathname + '">刷新页面</a>'
                 + '</td>'
                 + '<td width="20%" align="right"></td>'// + emergency_button() + '</td>'
                 + '</tr>'
