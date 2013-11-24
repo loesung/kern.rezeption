@@ -9,7 +9,7 @@ var contentType = function(filename){
         return table[l];
 };
 
-module.exports = function(e, result){
+module.exports = function(e, result, rueckruf){
     var tester = /^[0-9a-zA-Z\.\-]+$/;
     if(!tester.test(result[1])){
         outputError(e, 404);
@@ -28,6 +28,7 @@ module.exports = function(e, result){
                 });
                 e.response.end(data);
             };
+            rueckruf(null);
         }
     );
 };

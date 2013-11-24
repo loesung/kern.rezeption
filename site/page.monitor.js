@@ -19,7 +19,7 @@ function queryState(rueckruf){
     );
 };
 
-module.exports = function(e, matchResult){
+module.exports = function(e, matchResult, rueckruf){
     function callback(states){
         var content = '';
         if(false == states){
@@ -86,6 +86,8 @@ module.exports = function(e, matchResult){
                 + '</style>'
             ,
         });
+
+        rueckruf(null);
     };
 
     queryState(callback);

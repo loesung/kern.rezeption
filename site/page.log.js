@@ -1,4 +1,4 @@
-module.exports = function(e, matchResult){
+module.exports = function(e, matchResult, rueckruf){
     function callback(){
         outputPage(e, {
             title: '系统日志',
@@ -17,6 +17,7 @@ module.exports = function(e, matchResult){
                 + '</style>'
             ,
         });
+        rueckruf(null);
     };
     callback();
 };

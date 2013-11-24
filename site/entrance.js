@@ -98,29 +98,16 @@ outputPage = function(e, data){
     e.response.end(output);
 };
 
-var routerTable = {
-    '^(\/[0-9]+)?\/?\\??$': require('./page.index.js'),
-    '^(\/[0-9]+)?\/monitor\/?\\??$': require('./page.monitor.js'),
-    '^(\/[0-9]+)?\/log\/?\\??$': require('./page.log.js'),
 
-    '^\/static\/([0-9a-zA-Z\.\-]+)$': require('./page.static.js'),
-};
 
 module.exports = function(e){
-    console.log(e.request.url);
-
-    var handled = false;
-    for(var expression in routerTable){
-        var regexp = new RegExp(expression);
-        var result = regexp.exec(e.request.url);
-        if(null != result){
-            routerTable[expression](e, result);
-            handled = true;
-            break;
-        };
-    };
-
-    if(!handled){
-        outputError(e, 404);
-    };
+    $.nodejs.async.waterfall(
+        [
+            require('./router.js')(e),
+        ],
+        function(err, result){
+            if(null != err)    
+                outputError(e, 404);
+        }
+    );
 };
