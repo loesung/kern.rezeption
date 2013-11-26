@@ -41,6 +41,8 @@ outputPage = function(e, data){
     ;
 
     var sidebarWidth = 120;
+    var uptime = _.format.seconds2Human($.process.uptime());
+    var memoryUsage = _.format.bytes2Human($.process.memoryUsage().heapTotal);
 
     var output    
         = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
@@ -79,6 +81,7 @@ outputPage = function(e, data){
                   '<table class="fullWidth">'
                 + '<tr valign="bottom"><td>'
                 + '<strong>请务必启用图片！否则您可能看不到紧急按钮！</strong><br />'
+                + '服务器已运行' + uptime + '，进程占用内存' + memoryUsage + '<br />'
                 + '页面产生于: ' + new Date() + ' <a href="/' + (new Date().getTime()) + realPathname + '">刷新页面</a>'
                 + '</td>'
                 + '<td width="20%" align="right"></td>'// + emergency_button() + '</td>'

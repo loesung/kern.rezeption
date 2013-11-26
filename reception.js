@@ -5,6 +5,7 @@
  */
 
 require('./lib/baum.js');
+require('./lib/_.js');
 CONFIG = $.config.createConfig('./config/');
 SESSION = {};
 IPC = {};
@@ -50,3 +51,8 @@ for(var item in IPCMap){
 
 HTTPServer.on('data', site);
 HTTPServer.start();
+
+
+$.nodejs.memwatch.on('leak', function(e){
+    console.log(e);
+});
