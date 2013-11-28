@@ -52,7 +52,7 @@ function selfReportSync(){
     ret += add('系统或所用库的版本', [
         ['v8',      process.versions.v8,        'JavaScript引擎'],
         ['node',    process.versions.node,      '用来运行本系统的程序'], 
-        ['openssl', process.versions.openssl,   '提供密码服务'],
+        ['OpenSSL', process.versions.openssl,   '提供密码服务'],
         ['zlib',    process.versions.zlib,      '提供数据压缩服务'],
     ]);
     ret += '</table>';

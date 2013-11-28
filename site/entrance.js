@@ -44,6 +44,17 @@ outputPage = function(e, data){
     var uptime = _.format.seconds2Human($.process.uptime());
     var memoryUsage = _.format.bytes2Human($.process.memoryUsage().rss);
 
+    var nowtime = new Date();
+    var timeShow = nowtime.getFullYear() 
+        + '-' + (nowtime.getMonth() + 1)
+        + '-' + nowtime.getDay()
+        + ' '
+        + nowtime.getHours() + ':'
+        + nowtime.getMinutes() + ':'
+        + nowtime.getSeconds()
+    ;
+
+
     var output    
         = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
         + '<html><head><meta http-equiv="Content-Type" content="application/html; charset=utf-8" />'
@@ -77,14 +88,15 @@ outputPage = function(e, data){
               + emergency_button(sidebarWidth) 
               + '</td>'
             + '<td class="leftLine">'
-              + section('系统控制', 
+              + section('系统控制 ' + timeShow, 
                   '<table class="fullWidth">'
                 + '<tr valign="bottom"><td>'
-                + '<strong>请务必启用图片！否则您可能看不到紧急按钮！</strong><br />'
-                + '服务器已运行' + uptime + '，进程占用内存' + memoryUsage + '<br />'
-                + '页面产生于: ' + new Date() + ' <a href="/' + (new Date().getTime()) + realPathname + '">刷新页面</a>'
+                + '服务器已运行' + uptime + '，进程占用内存' + memoryUsage
                 + '</td>'
-                + '<td width="20%" align="right"></td>'// + emergency_button() + '</td>'
+                + '<td width="20%" align="center">'
+                +   '<form action="/' + (nowtime.getTime()) + realPathname + '">'
+                +   '<button class="navbutton btn-active" type="submit">刷新页面</button>'
+                +   "</form>"
                 + '</tr>'
                 +'</table>'
               )

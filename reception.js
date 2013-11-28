@@ -54,5 +54,5 @@ HTTPServer.start();
 
 
 $.nodejs.memwatch.on('leak', function(e){
-    console.log(e);
+    String('MEMWATCH detected potential memory leak:' + e).WARNING();
 });
