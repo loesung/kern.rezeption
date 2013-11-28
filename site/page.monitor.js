@@ -3,7 +3,7 @@ function queryState(rueckruf){
     for(var item in IPC){
         task[item] = (function(ipcname){
             return function(callback){
-                console.log('Querying for state of [' + ipcname + '].');
+                String('Querying for state of [' + ipcname + '].').DEBUG();
                 IPC[ipcname].request(
                     '/',
                     function(err, packet){
