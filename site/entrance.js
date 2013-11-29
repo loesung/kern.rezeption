@@ -31,7 +31,7 @@ outputPage = function(e, data){
         = navigate_bar()
         + navigate_link('首页', '/')
         + navigate_bar()
-        + navigate_link('收到的消息', '/msgcenter')
+        + navigate_link('消息队列', '/msgcenter')
         + navigate_link('撰写信息', '/send')
         + navigate_link('管理联系人', '/contact')
         + navigate_link('管理对称密钥', '/key')
@@ -47,7 +47,7 @@ outputPage = function(e, data){
     var nowtime = new Date();
     var timeShow = nowtime.getFullYear() 
         + '-' + (nowtime.getMonth() + 1)
-        + '-' + nowtime.getDay()
+        + '-' + nowtime.getDate()
         + ' '
         + nowtime.getHours() + ':'
         + nowtime.getMinutes() + ':'
