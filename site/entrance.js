@@ -32,7 +32,7 @@ outputPage = function(e, data){
         + navigate_link('首页', '/')
         + navigate_bar()
         + navigate_link('消息队列', '/msgcenter')
-        + navigate_link('撰写信息', '/send')
+        + navigate_link('撰写信息', '/compose')
         + navigate_link('管理联系人', '/contact')
         + navigate_link('管理对称密钥', '/key')
         + navigate_bar()

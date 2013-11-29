@@ -1,3 +1,6 @@
+function unread(){
+};
+
 function incoming(){
 };
 
@@ -30,6 +33,9 @@ module.exports = function(e, matchResult, rueckruf){
 
     var mainContent = '';
     switch(currentPage){
+        case 'unread':
+            mainContent = unread();
+            break;
         case 'incoming':
             mainContent = incoming();
             break;
@@ -45,6 +51,7 @@ module.exports = function(e, matchResult, rueckruf){
         title: '消息队列',
         content
             : [
+                navLink('未读消息',     'unread'),
                 navLink('已收到的消息', 'incoming'),
                 navLink('待发送的消息', 'outgoing')
             ].join(' ')

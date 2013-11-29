@@ -1,6 +1,7 @@
 var routerTable = {
     '^(\/[0-9]+)?\/?\\??$': require('./page.index.js'),
-    '^(\/[0-9]+)?\/msgcenter(\/(incoming|outgoing))?\/?\\??$': require('./page.msgcenter.js'),
+    '^(\/[0-9]+)?\/msgcenter(\/(unread|incoming|outgoing))?\/?\\??$': require('./page.msgcenter.js'),
+    '^(\/[0-9]+)?\/compose\/?\\??$': require('./page.compose.js'),
     '^(\/[0-9]+)?\/monitor\/?\\??$': require('./page.monitor.js'),
     '^(\/[0-9]+)?\/log\/?\\??$': require('./page.log.js'),
 
