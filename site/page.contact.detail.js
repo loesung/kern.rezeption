@@ -85,7 +85,7 @@ module.exports = function(identity, post, callback){
             + '<form method="POST" action="/' + (new Date().getTime()) + '/contact/remove">' 
             + '<input type="hidden" name="id" value="' + identityInfo.id + '">' 
             +   '<tr class="head">'
-            +       '<td>删除：请抄写识别ID前16位字母 <input type="text" name="confirm" size="17" maxlength="16"/></td>'
+            +       '<td>删除：请抄写识别ID前16位字母 <input type="text" name="confirm" size="17" maxlength="16"/> 然后按右侧按钮确定。</td>'
             +       '<td><button type="submit">确定删除</button></td>'
             +   '</tr>'
             + '</form>'
