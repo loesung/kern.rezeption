@@ -32,8 +32,7 @@ outputPage = function(e, data){
         + navigate_bar()
         + navigate_link('消息队列', '/msgcenter')
         + navigate_link('撰写信息', '/compose')
-        + navigate_link('管理联系人', '/contact')
-        + navigate_link('管理对称密钥', '/key')
+        + navigate_link('管理联系人和密钥', '/contact')
         + navigate_bar()
         + navigate_link('系统日志', '/log')
         + navigate_link('系统状态监视器', '/monitor')
@@ -63,7 +62,7 @@ outputPage = function(e, data){
             + 'body{background: #FFFFFF;}'
             + 'a img{border: 0px}'
             + '.fullWidth{width: 99%;}'
-            + '.navbutton {margin-bottom: 0px; padding: 0px; border: none; width: 100%}'
+            + '.navbutton {margin-bottom: 0px; padding: 0px; border: none; width: 100%; font-size: 9pt}'
             + '.btn-normal{background: #3333CC;color: #FFFFFF; text-decoration:none}'
             + '.btn-active{background: #DDDDFF;color: #000000; text-decoration:none;}'
             + '.navbar{padding-top: 3px;}'
