@@ -9,7 +9,6 @@ module.exports = function(identity, post, callback){
         return callback(true, '错误：未能确信您的删除意图。');
 
     identity.remove(id, function(err){
-        console.log(err, 'error');
         if(null != err)
             callback(true, '错误：删除错误。可能是已经删除，或者数据中心无法连接。');
         else
