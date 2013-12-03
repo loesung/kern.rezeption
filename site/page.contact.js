@@ -11,6 +11,32 @@ handlers.get = function(identity, callback){
     ], callback);
 };
 
+
+handlers.detail = function(identity, post, callback){
+    var identityInfo = null,
+        codebookInfo = null;
+
+    $.nodejs.async.waterfall([
+        function(callback){
+            identity.query(post.parsed.id, callback);
+        },
+
+        function(json, callback){
+            identityInfo = json;
+            callback(null);
+        },
+
+        function(callback){
+            // TODO check for codebooks
+            callback(null);
+        },
+
+    ], function(err, result){
+        callback(null, 'building');
+    });
+};
+
+
 function tablize(list, showPage){
     list.sort(function(a,b){
         return a.name < b.name;
@@ -86,8 +112,15 @@ module.exports = function(e, matchResult, rueckruf){
     };
 
     if(e.method == 'post'){
-        respond(null, 'test');
+        function waitAndRespond(handler){
+            e.on('ready', function(post){
+                handler(identity, post, respond);
+            });
+        };
         switch(subcommand){
+            case 'detail':
+                waitAndRespond(handlers.detail);
+                break;
             default:
                 break;
         };
