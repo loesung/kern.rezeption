@@ -33,6 +33,7 @@ module.exports = function(e, matchResult, rueckruf){
                   + '.report button,input{font-size: 9pt; text-align: center; background: #FFAAAA;}'
                 + '</style>'
         });
+        rueckruf(null);
     };
 
     if(e.method == 'post'){
