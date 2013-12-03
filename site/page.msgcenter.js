@@ -1,7 +1,7 @@
 function unread(){
 };
 
-function incoming($, queues, callback){
+function incoming(queues, callback){
     $.nodejs.async.waterfall([
         queues.receive.proceeded.list,
 
@@ -66,7 +66,7 @@ module.exports = function(e, matchResult, rueckruf){
             unread(contentCallback);
             break;
         case 'incoming':
-            incoming($, queues, contentCallback);
+            incoming(queues, contentCallback);
             break;
         case 'outgoing':
             outgoing(contentCallback);
