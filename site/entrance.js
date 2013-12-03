@@ -1,7 +1,3 @@
-var navigate_bar = function(){
-    return '<div class="navbar"></div>';
-};
-
 var emergency_button = function(width){
     if(undefined == width) width = 200;
     var height = 108 * width / 200;
@@ -12,13 +8,16 @@ outputPage = function(e, data){
     var realPathname = /^(\/[0-9]+)?(.+)$/.exec(e.url.pathname)[2];
     console.log(realPathname);
 
+    function navigate_bar(){
+        return '<tr><td class="navbar"></td></tr>';
+    };
     function navigate_link(name, target){
-        var ret = '<form action="/' + (new Date().getTime()) + target + '">';
+        var ret = '<form action="/' + (new Date().getTime()) + target + '"><tr><td>';
         if(realPathname == target)
             ret += ('<button class="navbutton btn-active" type="submit">' + name + '</button>');
         else
             ret += ('<button class="navbutton btn-normal" type="submit">' + name + '</button>');
-        ret += "</form>";
+        ret += "</td></tr></form>";
         return ret;
     };
     function section(name, content){
@@ -67,12 +66,14 @@ outputPage = function(e, data){
             + '.navbutton {margin-bottom: 0px; padding: 0px; border: none; width: 100%}'
             + '.btn-normal{background: #3333CC;color: #FFFFFF; text-decoration:none}'
             + '.btn-active{background: #DDDDFF;color: #000000; text-decoration:none;}'
-            + '.navbar{padding-top: 1px;}'
+            + '.navbar{padding-top: 3px;}'
             + 'input[type="hidden"]{display: none}'
             + '.leftLine{border-left:#CCCCCC 1px solid;}'
             + '.bottomLine{border-bottom:#CCCCCC 1px solid;}'
             + '.topLine{border-top:#CCCCCC 1px solid;}'
             + '.bar{font-weight: bold; background: #3333CC; color: #FFFFFF; padding: 5px;}'
+            + '.fineLine{border: none; width: 100%}'
+            + '.fineLine tr,td{border: none}'
             + '#hidden{display: none}'
         + '</style>'
         + '</head><body>'
@@ -84,7 +85,7 @@ outputPage = function(e, data){
           + '<tr valign="top">'
             + '<td width="5%">'
               + '<img src="/static/logo.png" width="' + sidebarWidth + '" height="' + 106 * sidebarWidth / 160 + '">' 
-              + menu 
+              + '<table class="fineLine" cellspacing="0" cellpadding="0">' + menu + '</table>'
               + emergency_button(sidebarWidth) 
               + '</td>'
             + '<td class="leftLine">'

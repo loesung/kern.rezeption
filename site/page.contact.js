@@ -31,7 +31,7 @@ function tablize(list, showPage){
         + '<tr class="head">' 
             + '<td width="25%">短识别ID</td>'
             + '<td>名称</td>'
-            + '<td width="20%">操作</td>'
+            + '<td width="12%">操作</td>'
         + '</tr>'
     ;
 
@@ -43,20 +43,26 @@ function tablize(list, showPage){
     };
 
     for(var i in list){
-        ret += '<tr>'
+        ret += ''
+            + '<form method="POST" action="/' + (new Date().getTime()) + '/contact/detail">'
+            + '<input style="display: none" type="hidden" name="id" value="' + list[i].id + '"/>'
+            + '<tr>'
             + '<td>' + shortID(list[i].id) + '</td>'
             + '<td>' + list[i].name + '</td>'
-            + '<td>' + '删除' + '</td>'
+            + '<td>'
+            +   '<button type="submit">查看详情</button>'
+            + '</td>'
             + '</tr>'
+            + '</form>' 
         ;
     };
     ret += '</table>';
-console.log(ret);
     return ret;
 };
 
 module.exports = function(e, matchResult, rueckruf){
     var identity = _.identity(IPC['datenbank']);
+    var subcommand = matchResult[3];
 
     function respond(err, content){
         if(null != err){
@@ -65,8 +71,7 @@ module.exports = function(e, matchResult, rueckruf){
         outputPage(e, {
             title: '联系人',
             content
-                : [
-                ].join(' ')
+                : '' 
                 + '<br />'
                 + content
             ,
@@ -75,11 +80,17 @@ module.exports = function(e, matchResult, rueckruf){
                   + '.report{border: #CCCCCC 1px solid; width: 100%}'
                   + '.report td{border: #CCCCCC 0.5px solid;}'
                   + '.report .head{background: #CCCCCC;}'
+                  + '.report button{font-size: 9pt; text-align: center; background: #FFAAAA;}'
                 + '</style>'
         });
     };
 
     if(e.method == 'post'){
+        respond(null, 'test');
+        switch(subcommand){
+            default:
+                break;
+        };
     } else {
         handlers.get(identity, respond);
     };
