@@ -13,11 +13,13 @@ function index(callback){
 };
 
 module.exports = function(e, matchResult, rueckruf){
-    var currentPage = matchResult[3];
+    var subcommand = matchResult[4],
+        parameter = matchResult[6],
+        action = matchResult[8];
     var queues = _.queue(IPC['datenbank']);
 
     function navLink(text, target){
-        if(currentPage == target)
+        if(subcommand == target)
             return '[' + text + ']';
         else
             return '[<a href="/' + (new Date().getTime())
@@ -59,13 +61,25 @@ module.exports = function(e, matchResult, rueckruf){
         rueckruf(null);
     };
 
-    if($.types.isString(currentPage) && undefined != handlers[currentPage]){
+    if($.types.isString(subcommand) && undefined != handlers[subcommand]){
         if('post' == e.method){
             e.on('ready', function(post){
-                handlers[currentPage](queues, post, respond);
+                handlers[subcommand](
+                    queues,
+                    parameter,
+                    action,
+                    post,
+                    respond
+                );
             });
         } else
-            handlers[currentPage](queues, null, respond);
+            handlers[subcommand](
+                queues,
+                parameter,
+                action,
+                null,
+                respond
+            );
     } else {
         index(respond);
     };

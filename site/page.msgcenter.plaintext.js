@@ -1,4 +1,4 @@
-module.exports = function(queues, post, respond){
+function listQueue(queues, parameter, post, respond){
     var workflow = [];
 
     workflow.push(queues.send.pending.list);
@@ -48,4 +48,13 @@ module.exports = function(queues, post, respond){
         output += '</table>';
         respond(null, output);
     });
+};
+
+module.exports = function(queues, parameter, action, post, respond){
+    console.log(parameter, action);
+    if(action == undefined){
+        listQueue(queues, parameter, post, respond);
+    } else {
+        
+    };
 };
