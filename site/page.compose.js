@@ -1,5 +1,6 @@
 var handlers = {};
 handlers.write = require('./page.compose.write.js');
+handlers.save = require('./page.compose.save.js');
 
 module.exports = function(e, matchResult, rueckruf){
     function respond(err, content){
@@ -18,8 +19,7 @@ module.exports = function(e, matchResult, rueckruf){
 
     if('post' == e.method){
         e.on('ready', function(post){
-            $.global.set('compose', post.parsed.content);
-            handlers.write(respond);
+            handlers.save(post, respond);
         });
     } else {
         handlers.write(respond);
