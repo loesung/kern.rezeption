@@ -20,7 +20,7 @@ module.exports = function(e, matchResult, rueckruf){
 
     function navLink(text, target){
         if(subcommand == target)
-            return '[' + text + ']';
+            return '[<font color="#FF0000">' + text + '</font>]';
         else
             return '[<a href="/' + (new Date().getTime())
                 + '/msgcenter/' + target + '">' + text + '</a>]'
