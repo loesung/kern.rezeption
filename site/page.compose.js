@@ -7,6 +7,12 @@ module.exports = function(e, matchResult, rueckruf){
 
     function respond(err, content){
         if(null != err){
+            if(301 == err){
+                e.response.writeHead(301, 'Location: ' + content);
+                e.response.end();
+                return;
+            };
+
             if(!$.types.isString(content))
                 content = '错误：无法连接到数据中心。';
             content = '<br />'

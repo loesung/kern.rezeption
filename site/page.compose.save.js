@@ -13,9 +13,22 @@ module.exports = function(queues, post, respond){
             return;
         };
 
-        var id = json.id;
+        var queueID = json.id;
+        delete json;
+
         $.global.set('compose', '');
-        callback(null, ('saved:' + id));
+        callback(null, queueID);
+    });
+
+    workflow.push(function(queueID, callback){
+        switch(post.parsed.send){
+            case 'passphrase':
+                break;
+            case '':
+                break;
+            default:
+                break;
+        };
     });
 
     $.nodejs.async.waterfall(workflow, respond);

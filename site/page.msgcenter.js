@@ -1,18 +1,5 @@
-function unread(){
-};
-
-function incoming(queues, callback){
-    $.nodejs.async.waterfall([
-        queues.receive.proceeded.list,
-
-    ], function cb(err, result){
-        callback(err, String(''
-        ));
-    });
-};
-
-function outgoing(){
-    
+var handlers = {
+    plaintext: require('./page.msgcenter.plaintext.js'),
 };
 
 function index(callback){
@@ -31,19 +18,14 @@ module.exports = function(e, matchResult, rueckruf){
 
     function navLink(text, target){
         if(currentPage == target)
-            return '[<strong>' + text + '</strong>]';
+            return '[' + text + ']';
         else
-            return '[<a href="/'
-                + (new Date().getTime())
-                + '/msgcenter/'
-                + target
-                + '">'
-                + text
-                + '</a>]'
+            return '[<a href="/' + (new Date().getTime())
+                + '/msgcenter/' + target + '">' + text + '</a>]'
             ;
     };
 
-    function contentCallback(err, content){
+    function respond(err, content){
         if(null != err){
             content = '错误，可能是连接不到消息队列。';
         };
@@ -51,30 +33,40 @@ module.exports = function(e, matchResult, rueckruf){
             title: '消息队列',
             content
                 : [
-                    navLink('未读消息',     'unread'),
-                    navLink('已收到的消息', 'incoming'),
-                    navLink('待发送的消息', 'outgoing')
+                    '<strong>收到的消息</strong>',
+                    navLink('尚未解密', 'ciphertext'),
+                    navLink('已经解密', 'decrypted'),
+                    ':: ::',
+                    '<strong>发出的消息</strong>',
+                    navLink('尚未加密', 'plaintext'),
+                    navLink('准备发送', 'encrypted'),
                 ].join(' ')
                 + '<br />'
                 + content
             ,
+            head
+                : '<style type="text/css">'
+                  + '.report{border: #CCCCCC 1px solid; width: 100%}'
+                  + '.report td{border: #CCCCCC 0.5px solid;}'
+                  + '.report .head{background: #CCCCCC;}'
+                  + '.report .switch{font-weight: bold; text-align: center}'
+                  + '.report .good{background: #00C000; color: #FFFFFF}'
+                  + '.report .error{background: #BB0000; color: #FFFF00}'
+                  + '.report .unknow{background: #FFDD00; color: #FF0000}'
+                + '</style>'
+            ,
         });
+        rueckruf(null);
     };
 
-    switch(currentPage){
-        case 'unread':
-            unread(contentCallback);
-            break;
-        case 'incoming':
-            incoming(queues, contentCallback);
-            break;
-        case 'outgoing':
-            outgoing(contentCallback);
-            break;
-        default:
-            index(contentCallback);
-            break;
+    if($.types.isString(currentPage) && undefined != handlers[currentPage]){
+        if('post' == e.method){
+            e.on('ready', function(post){
+                handlers[currentPage](queues, post, respond);
+            });
+        } else
+            handlers[currentPage](queues, null, respond);
+    } else {
+        index(respond);
     };
-
-    rueckruf(null);
 };

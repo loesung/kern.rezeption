@@ -1,6 +1,6 @@
 function tablize(list, showPage){
     list.sort(function(a,b){
-        return a.name < b.name;
+        return ((a.name < b.name)?1:-1);
     });
 
     var perPage = 10,
