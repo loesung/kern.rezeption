@@ -1,5 +1,8 @@
+var PER_PAGE = 8;
+
 function listQueue(queues, parameter, post, respond){
     var workflow = [];
+    var pager = null;
 
     workflow.push(queues.send.pending.list);
 
@@ -7,14 +10,17 @@ function listQueue(queues, parameter, post, respond){
         list.sort(function(a, b){
             return b.timestamp - a.timestamp;
         });
-        callback(null, list);
+
+        pager = _.paging(list, PER_PAGE, parameter);
+
+        callback(null, pager);
     });
 
     workflow.push(function(list, callback){
         var result = [];
-        for(var i in list){
+        for(var i in pager.list){
             result.push((function(){
-                var itemID = list[i].id;
+                var itemID = pager.list[i].id;
                 return function(callback){
                     queues.send.pending.query(itemID, callback);
                 };
@@ -44,8 +50,19 @@ function listQueue(queues, parameter, post, respond){
                 + '</tr>'
             ;
         };
+        output += '</table>'
+            + '第' + pager.current + '页/共' + pager.max + '页 '
+            + pager.navigateBar(function(i, cur){
+                if(cur)
+                    return ('[<font color="#FF0000">' + i + '</font>]');
+                else
+                    return ('[<a href="/' + (new Date().getTime())
+                        + '/msgcenter/plaintext/' + i + '">' + i + '</a>]')
+                    ;
+                }
+            )
+        ;
 
-        output += '</table>';
         respond(null, output);
     });
 };
