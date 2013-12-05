@@ -46,7 +46,7 @@ module.exports = function(queues, parameter, post, respond){
                                     new Date(item.timestamp * 1000)
                     ) + '</td>'
                 +       '<td>' + item.data + '</td>'
-                +       '<td><input type="checkbox" /></td>'
+                +       '<td><input type="checkbox" name="item' + i + '" value="' + item.id + '"/></td>'
                 + '</tr>'
             ;
         };

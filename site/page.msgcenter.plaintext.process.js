@@ -15,7 +15,12 @@ module.exports = function(queues, parameter, post, respond){
         };
     };
 
+    if(objectIDs.length < 1){
+        respond(302, '/' + (new Date().getTime()) + '/msgcenter/plaintext');
+        return;
+    };
 
-    console.log(parameter, post);
+
+    console.log(parameter, post, objectIDs, '**');
     respond(null, 'Hallo');
 };

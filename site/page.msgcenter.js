@@ -28,6 +28,12 @@ module.exports = function(e, matchResult, rueckruf){
     };
 
     function respond(err, content){
+        if(302 == err){
+            console.log(content);
+            e.response.writeHead(302, {Location: content});
+            e.response.end();
+            return;
+        };
         if(null != err){
             content = '错误，可能是连接不到消息队列。';
         };

@@ -7,7 +7,6 @@ var handlers = {
 module.exports = function(queues, parameter, action, post, respond){
     if('do' == action){
         handlers.process(queues, parameter, post, respond);
-    } else if('remove' == action){
     } else {
         handlers.listQueue(queues, parameter, post, respond);
     };
