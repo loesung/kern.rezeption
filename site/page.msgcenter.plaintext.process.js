@@ -1,4 +1,7 @@
 module.exports = function(queues, parameter, post, respond){
+    function backToIndex(){
+        respond(302, '/' + (new Date().getTime()) + '/msgcenter/plaintext');
+    };
     var isID = /^[0-9a-f]{8}\-([0-9a-f]{4}\-){3}[0-9a-f]{12}$/i;
 
     /* Determine objects being operated
@@ -14,13 +17,18 @@ module.exports = function(queues, parameter, post, respond){
                 objectIDs.push(post.parsed[key].toLowerCase());
         };
     };
+    if(objectIDs.length < 1) return backToIndex();
 
-    if(objectIDs.length < 1){
-        respond(302, '/' + (new Date().getTime()) + '/msgcenter/plaintext');
-        return;
-    };
+    /* Determine action: send, or remove */
+    var action = 'send';
+    if('remove' == post.parsed['do']) action = 'remove';
 
+    /* Determine desired sending method */
+    var via = 'no';
+    via = post.parsed['send'];
+    if(!/^(no|passphrase|codebook|sign)$/i.test(via)) return backToIndex();
+    
 
-    console.log(parameter, post, objectIDs, '**');
+    console.log(objectIDs, action, via, '**');
     respond(null, 'Hallo');
 };
