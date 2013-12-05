@@ -33,7 +33,7 @@ function listQueue(queues, parameter, post, respond){
         var output = '<form method="POST">'
             +'<table class="report" cellspacing="0" cellpadding="0" style="font-size: 9pt">'
             + '<tr class="head">'
-            +   '<td width="25%">时间</td>'
+            +   '<td width="20%">时间</td>'
             +   '<td>内容</td>'
             +   '<td width="5%">选择</td>'
             + '</tr>'
@@ -80,9 +80,9 @@ function listQueue(queues, parameter, post, respond){
 
 module.exports = function(queues, parameter, action, post, respond){
     console.log(parameter, action);
-    if(action == undefined){
-        listQueue(queues, parameter, post, respond);
+    if('do' == action){
+    } else if('remove' == action){
     } else {
-        
+        listQueue(queues, parameter, post, respond);
     };
 };
