@@ -30,11 +30,12 @@ function listQueue(queues, parameter, post, respond){
     });
 
     $.nodejs.async.waterfall(workflow, function(err, result){
-        var output = '<table class="report" cellspacing="0" cellpadding="0">'
+        var output = '<form method="POST">'
+            +'<table class="report" cellspacing="0" cellpadding="0" style="font-size: 9pt">'
             + '<tr class="head">'
             +   '<td width="25%">时间</td>'
             +   '<td>内容</td>'
-            +   '<td width="20%">操作</td>'
+            +   '<td width="5%">选择</td>'
             + '</tr>'
         ;
 
@@ -46,7 +47,7 @@ function listQueue(queues, parameter, post, respond){
                                     new Date(item.timestamp * 1000)
                     ) + '</td>'
                 +       '<td>' + item.data + '</td>'
-                +       '<td>删除|发送</td>'
+                +       '<td><input type="checkbox" /></td>'
                 + '</tr>'
             ;
         };
@@ -61,6 +62,16 @@ function listQueue(queues, parameter, post, respond){
                     ;
                 }
             )
+            + '<br /><table><tr><td>选中项目：</td>'
+            + '<td><select name="send">'
+            +   '<option value="passphrase" selected>加密，使用临时输入的口令</option>'
+            +   '<option value="codebook">加密，指定一个或多个收件人，使用密码本</option>'
+            +   '<option value="sign">使用公钥签署，但不加密</option>'
+            + '</select></td>'
+            + '<td><button type="submit" name="do" value="send">发送</button></td>'
+            + '<td><button type="submit" name="do" value="remove">删除</button></td>'
+            + '</tr></table>'
+            + '</form>'
         ;
 
         respond(null, output);

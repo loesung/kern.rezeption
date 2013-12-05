@@ -1,4 +1,5 @@
 module.exports = function(queues, post, respond){
+    console.log(post);
     $.global.set('compose', post.parsed.content);
 
     var workflow = [];
