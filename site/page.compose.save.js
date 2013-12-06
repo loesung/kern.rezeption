@@ -22,13 +22,13 @@ module.exports = function(queues, post, respond){
     });
 
     workflow.push(function(queueID, callback){
-        switch(post.parsed.send){
-            case 'passphrase':
-                break;
-            case '':
-                break;
-            default:
-                break;
+        if(!/^(passphrase|codebook|sign)$/i.test(post.parsed.send)){
+            callback(302, '/msgcenter/plaintext');
+        } else {
+            callback(
+                302,
+                '/msgcenter/plaintext/' + queueID + '/' + post.parsed.send
+            );
         };
     });
 

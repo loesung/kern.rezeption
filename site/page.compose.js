@@ -7,8 +7,11 @@ module.exports = function(e, matchResult, rueckruf){
 
     function respond(err, content){
         if(null != err){
-            if(301 == err){
-                e.response.writeHead(301, 'Location: ' + content);
+            if(302 == err){
+                e.response.writeHead(
+                    302,
+                    {'Location': '/' + (new Date().getTime()) + content}
+                );
                 e.response.end();
                 return;
             };

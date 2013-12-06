@@ -5,8 +5,8 @@ var handlers = {
 
 
 module.exports = function(queues, parameter, action, post, respond){
-    if('do' == action){
-        handlers.process(queues, parameter, post, respond);
+    if($.types.isString(action)){
+        handlers.process(queues, parameter, post, respond, action);
     } else {
         handlers.listQueue(queues, parameter, post, respond);
     };

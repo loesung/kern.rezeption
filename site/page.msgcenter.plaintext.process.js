@@ -1,6 +1,6 @@
-module.exports = function(queues, parameter, post, respond){
+module.exports = function(queues, parameter, post, respond, urlcommand){
     function backToIndex(){
-        respond(302, '/' + (new Date().getTime()) + '/msgcenter/plaintext');
+        respond(302, '/msgcenter/plaintext');
     };
     var isID = /^[0-9a-f]{8}\-([0-9a-f]{4}\-){3}[0-9a-f]{12}$/i;
 
@@ -21,12 +21,13 @@ module.exports = function(queues, parameter, post, respond){
 
     /* Determine action: send, or remove */
     var action = 'send';
-    if('remove' == post.parsed['do']) action = 'remove';
+    if($.types.isObject(post))
+        if('remove' == post.parsed['do']) action = 'remove';
 
     /* Determine desired sending method */
-    var via = 'no';
-    via = post.parsed['send'];
-    if(!/^(no|passphrase|codebook|sign)$/i.test(via)) return backToIndex();
+    var via = urlcommand;
+    if('do' == via) via = post.parsed['send'];
+    if(!/^(passphrase|codebook|sign)$/i.test(via)) return backToIndex();
     
 
     console.log(objectIDs, action, via, '**');

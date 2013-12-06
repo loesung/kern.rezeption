@@ -30,7 +30,10 @@ module.exports = function(e, matchResult, rueckruf){
     function respond(err, content){
         if(302 == err){
             console.log(content);
-            e.response.writeHead(302, {Location: content});
+            e.response.writeHead(
+                302,
+                {Location: '/' + (new Date().getTime()) + content}
+            );
             e.response.end();
             return;
         };
