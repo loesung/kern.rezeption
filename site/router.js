@@ -1,4 +1,4 @@
-var routerTable = {
+var httpRouterTable = {
     '^(\/[0-9]+)?\/?\\??$': require('./page.index.js'),
     '^(\/[0-9]+)?\/msgcenter((\/(encrypted|decrypted|ciphertext|plaintext))(\/([0-9a-f\-]+)(\/(do|remove|codebook|passphrase|sign))?)?)?\/?\\??$': 
         require('./page.msgcenter.js'),
@@ -11,9 +11,19 @@ var routerTable = {
     '^\/static\/([0-9a-zA-Z\.\-]+)$': require('./page.static.js'),
 };
 
+var ipcRouterTable = {
+    '^(\/[0-9]+)?\/?\\??$': require('./ipc.index.js'),
+};
+
 module.exports = function(e){
     return function(callback){
         var handled = false;
+        var routerTable = null;
+        if(e.protocol == 'http') 
+            routerTable = httpRouterTable;
+        else
+            routerTable = ipcRouterTable;
+
         for(var expression in routerTable){
             var regexp = new RegExp(expression);
             var result = regexp.exec(e.request.url);

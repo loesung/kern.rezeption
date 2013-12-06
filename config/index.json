@@ -3,5 +3,7 @@
 
     {"name":"site-name", "default":"LOESUNG - 机要核心"},
 
-    {"name":"ipc-map", "type":"json"}
+    {"name":"ipc-map", "type":"json"},
+
+    {"name":"socket-path", "default":"/tmp/loesung-rezeption"}
 ]

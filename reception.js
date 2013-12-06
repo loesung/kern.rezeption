@@ -34,11 +34,15 @@ outputError = function(e, code, message){
 
 var site = require('./site/entrance.js');
 var port = CONFIG.get('http-port');
+var socketPath = CONFIG.get('socket-path');
 
 var HTTPServer = $.net.HTTP.server(port);
-console.log('HTTP Server created at port: ' + port);
+String('HTTP Server created at port: ' + port).NOTICE();
 
-console.log('Read IPC map.');
+var IPCServer = $.net.IPC.server(socketPath);
+String('IPC Server created at: ' + socketPath).NOTICE();
+
+String('Read IPC map.').NOTICE();
 var IPCMap = CONFIG.get('ipc-map');
 for(var item in IPCMap){
     console.log(
@@ -51,6 +55,9 @@ for(var item in IPCMap){
 
 HTTPServer.on('data', site);
 HTTPServer.start();
+
+IPCServer.on('data', site);
+IPCServer.start();
 
 
 $.nodejs.memwatch.on('leak', function(e){

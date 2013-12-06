@@ -6,7 +6,6 @@ var emergency_button = function(width){
 
 outputPage = function(e, data){
     var realPathname = /^(\/[0-9]+)?(.+)$/.exec(e.url.pathname)[2];
-    console.log(realPathname);
 
     function navigate_bar(){
         return '<tr><td class="navbar"></td></tr>';
@@ -108,6 +107,8 @@ outputPage = function(e, data){
 
 
 module.exports = function(e){
+    String('[' + e.protocol.toUpperCase() + ' SERVER] ' + e.method.toUpperCase() + ': ' + e.url.href).NOTICE();
+
     $.nodejs.async.waterfall(
         [
             require('./router.js')(e),
