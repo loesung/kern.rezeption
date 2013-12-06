@@ -18,6 +18,24 @@ function akashicForm(ids, phase, action){
 
 function remove(queues, ids, phase, post, respond){
     var output = '';
+
+    function worker(){
+        var task = [];
+        for(var i in ids){
+            task.push((function(){
+                var itemID = ids[i];
+                return function(callback){
+                    queues.send.pending.remove(itemID, function(){
+                        callback(null);
+                    });
+                };
+            })());
+        };
+        $.nodejs.async.parallel(task, function(err){
+            respond(302, '/msgcenter/plaintext');
+        });
+    };
+
     if(0 == phase){
         output = '确定删除' + ids.length + '条待发消息？'
             + '<form method="POST" action="/' + (new Date().getTime()) + '/msgcenter/plaintext/-/do">'
@@ -29,7 +47,7 @@ function remove(queues, ids, phase, post, respond){
         respond(null, output);
     } else {
         if('y' == post.parsed['confirm']){
-            respond(null, JSON.stringify(ids));
+            worker();
         } else {
             respond(302, '/msgcenter/plaintext');
         };
@@ -74,6 +92,6 @@ module.exports = function(queues, parameter, post, respond, urlcommand){
     if('remove' == action){
         remove(queues, objectIDs, phase, post, respond);
     } else {
+        respond(null, 'not-implemented');
     };
-    console.log(objectIDs, action, '**');
 };
