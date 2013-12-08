@@ -35,6 +35,7 @@ outputPage = function(e, data){
         + navigate_bar()
         + navigate_link('系统日志', '/log')
         + navigate_link('系统状态监视器', '/monitor')
+        + navigate_link('密文信道监视器', '/tunnel')
     ;
 
     var sidebarWidth = 120;

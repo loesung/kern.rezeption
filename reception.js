@@ -45,13 +45,14 @@ String('IPC Server created at: ' + socketPath).NOTICE();
 String('Read IPC map.').NOTICE();
 var IPCMap = CONFIG.get('ipc-map');
 for(var item in IPCMap){
-    console.log(
-        'Create IPC Client at ['
-        + IPCMap[item]
-        + '] for [' + item + '].'
-    );
+    String(
+        'Create IPC Client at [' + IPCMap[item] + '] for [' + item + '].'
+    ).NOTICE();
     IPC[item] = $.net.IPC.client(IPCMap[item]);
 };
+
+String('Initialize Botschaft-System communication.').NOTICE();
+$.global.set('botschaft', _.botschaft(IPC['botschaft']));
 
 HTTPServer.on('data', site);
 HTTPServer.start();
