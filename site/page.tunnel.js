@@ -2,7 +2,7 @@
  * Manage tunnels, and provides a page to user
  */
 module.exports = function(e, matchResult, rueckruf){
-    $.global.get('botschaft').refresh();
+    $.global.get('botschaft').refreshTunnelInfo();
 
     var content = '';
     if(false == true){
