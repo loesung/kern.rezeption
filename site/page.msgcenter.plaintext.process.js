@@ -36,7 +36,15 @@ function encryptAndDeleter(queues, ipc, msgid, type, opts){
 
         // if obtained ciphertext, insert to queue `send.proceeded`.
         workflow.push(function(data, cb){
-            queues.send.proceeded.push(data, function(err){
+            try{
+                var ciphertext = 
+                    new $.nodejs.buffer.Buffer(data.raw, 'hex').toString();
+            } catch(e){
+                return cb(true);
+            };
+            if(ciphertext.length <= 0) return cb(true);
+
+            queues.send.proceeded.push(ciphertext, function(err){
                 cb(err);
             });
         });
@@ -157,8 +165,8 @@ function passphrase(queues, ids, phase, post, respond){
         });
 
         // carry out tasks!
-        $.nodejs.async.waterfall(workflow, function(err, result){
-            respond(null, 'I\'m working on this.');
+        $.nodejs.async.waterfall(workflow, function(err){
+            respond(302, '/msgcenter/plaintext');
         });
 
         // End of bulk encryption.
