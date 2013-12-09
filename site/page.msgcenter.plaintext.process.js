@@ -36,19 +36,36 @@ function passphrase(queues, ids, phase, post, respond){
     if(0 == phase){
         output = '&gt;&gt; 即将使用临时口令加密 <font color="#FF0000">'
             + ids.length
-            + '</font> 条密文。<br />'
+            + '</font> 条密文。请确定用来保护信息的密码。'
 
             + '<form method="POST" action="/' + (new Date().getTime()) + '/msgcenter/plaintext/-/do">'
             + akashicForm(ids, phase, 'passphrase')
-            + '<table>'
-            + '<tr><td>请输入密码：</td><td><input name="password" type="password"/></td></tr>'
-            + '<tr><td>请再输入一遍确认：</td><td><input name="password2" type="password"/></td></tr>'
-            + '<tr><td colspan="2">解密时，需要对方输入同样的密码。您可以给出提示：</td></tr>'
-            + '<tr><td colspan="2"><input name="hint" type="text"/></td></tr>'
+            + '<table cellspacing="1" cellpadding="0">'
+            + '<tr><td colspan="2">'
+            + '密码必须不少于于20个字符，并且由大写(A-Z)、小写(a-z)、数字(0-9)和特殊字符(键盘上可见符号)混杂而成。<br />'
+            + '解密需要对方输入同样的密码。您可以给出密码提示，不超过140字符，只能由组成密码的可行字符和空格构成。'
+            + '</td></tr>'
+            + '<tr><td>请输入密码：</td><td><input name="password" type="password" size="40"/></td></tr>'
+            + '<tr><td>请再输入一遍确认：</td><td><input name="password2" type="password" size="40"/></td></tr>'
+            + '<tr><td>密码提示：</td>'
+            + '<td><input name="hint" type="text" size="40"/></td></tr>'
             + '</table>'
+
+            + '<table><tr>'
+            + '<td><button type="submit" name="submit" value="encrypt" class="navbutton btn-normal">加密</button></td>'
+            + '<td><button type="submit" name="submit" value="cancel" class="navbutton">取消</button></td>'
+            + '</tr></table>'
+
             + '</form>'
         ;
         respond(null, output);
+    } else {
+        if('encrypt' != post.parsed.submit){
+            respond(302, '/msgcenter/plaintext');
+            return;
+        };
+        console.log(ids, post);
+        respond(null, 'I\'m working on this.');
     }; 
 };
 
