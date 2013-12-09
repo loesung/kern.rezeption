@@ -7,7 +7,7 @@ var httpRouterTable = {
     '^(\/[0-9]+)?\/contact(\/(detail|add|remove))?\/?\\??$': require('./page.contact.js'),
     '^(\/[0-9]+)?\/codebook\/([0-9a-fA-F]+)(\/(detail|add|remove))?\/?\\??$': require('./page.contact.js'),
     '^(\/[0-9]+)?\/log\/?\\??$': require('./page.log.js'),
-    '^(\/[0-9]+)?\/tunnel\/?\\??$': require('./page.tunnel.js'),
+    '^(\/[0-9]+)?\/tunnel(\/([0-9a-fA-F]+))?\/?\\??$': require('./page.tunnel.js'),
 
     '^\/static\/([0-9a-zA-Z\.\-]+)$': require('./page.static.js'),
 };

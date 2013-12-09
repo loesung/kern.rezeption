@@ -53,6 +53,7 @@ for(var item in IPCMap){
 
 String('Initialize Botschaft-System communication.').NOTICE();
 $.global.set('botschaft', _.botschaft(IPC['botschaft']));
+$.global.get('botschaft').refreshTunnelInfo();
 
 HTTPServer.on('data', site);
 HTTPServer.start();

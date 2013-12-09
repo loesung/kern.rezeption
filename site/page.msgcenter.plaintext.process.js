@@ -16,6 +16,16 @@ function akashicForm(ids, phase, action){
     return output;
 };
 
+/*
+ * Encrypt using passphrase
+ */
+function passphrase(queues, ids, phase, post, respond){
+
+};
+
+/*
+ * Remove selected messages
+ */
 function remove(queues, ids, phase, post, respond){
     var output = '';
 
@@ -54,6 +64,11 @@ function remove(queues, ids, phase, post, respond){
     };
 };
 
+
+
+/*
+ * Logic to apply job
+ */
 module.exports = function(queues, parameter, post, respond, urlcommand){
     function backToIndex(){
         respond(302, '/msgcenter/plaintext');
@@ -89,9 +104,15 @@ module.exports = function(queues, parameter, post, respond, urlcommand){
             phase = Math.round(post.parsed['phase']);
     };
 
-    if('remove' == action){
-        remove(queues, objectIDs, phase, post, respond);
-    } else {
-        respond(null, 'not-implemented');
+    switch(action){
+        case 'remove':
+            remove(queues, objectIDs, phase, post, respond);
+            break;
+        case 'passphrase':
+            passphrase(queues, objectIDs, phase, post, respond); 
+            break;
+        default:
+            respond(null, 'not-implemented');
+            break;
     };
 };

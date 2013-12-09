@@ -96,6 +96,14 @@ module.exports = function(identity, post, callback){
             +   '<td><button type="submit">管理密码本</button></tr>'
             + '</tr>'
             + '</form>'
+
+            + '<form method="GET" action="/' + (new Date().getTime()) + '/tunnel/' + identityInfo.id + '">' 
+            + '<tr class="head">'
+            +   '<td>要查看通讯系统为此用户通讯提供的通讯信道，请点击：</td>'
+            +   '<td><button type="submit">查看信道</button></tr>'
+            + '</tr>'
+            + '</form>'
+
             + '</table>'
         ;
         callback(null, output);
