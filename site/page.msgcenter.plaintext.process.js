@@ -40,7 +40,12 @@ function passphrase(queues, ids, phase, post, respond){
 
             + '<form method="POST" action="/' + (new Date().getTime()) + '/msgcenter/plaintext/-/do">'
             + akashicForm(ids, phase, 'passphrase')
-            + '请输入密码：'
+            + '<table>'
+            + '<tr><td>请输入密码：</td><td><input name="password" type="password"/></td></tr>'
+            + '<tr><td>请再输入一遍确认：</td><td><input name="password2" type="password"/></td></tr>'
+            + '<tr><td colspan="2">解密时，需要对方输入同样的密码。您可以给出提示：</td></tr>'
+            + '<tr><td colspan="2"><input name="hint" type="text"/></td></tr>'
+            + '</table>'
             + '</form>'
         ;
         respond(null, output);
