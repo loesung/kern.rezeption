@@ -38,40 +38,46 @@ module.exports = function(queues, parameter, post, respond){
             + '</tr>'
         ;
 
-        for(var i in result){
-            var item = result[i];
-            output 
-                += '<tr>'
-                +       '<td>' + _.format.time2Full(
-                                    new Date(item.timestamp * 1000)
-                    ) + '</td>'
-                +       '<td>' + item.data + '</td>'
-                +       '<td><input type="checkbox" name="item' + i + '" value="' + item.id + '"/></td>'
-                + '</tr>'
+        if(result.length < 1){
+            output += '<tr><td colspan="3">'
+                + '当前没有项目</td></tr>'
+                + '</table></form>';
+        } else {
+            for(var i in result){
+                var item = result[i];
+                output 
+                    += '<tr>'
+                    +       '<td>' + _.format.time2Full(
+                                        new Date(item.timestamp * 1000)
+                        ) + '</td>'
+                    +       '<td>' + item.data + '</td>'
+                    +       '<td><input type="checkbox" name="item' + i + '" value="' + item.id + '"/></td>'
+                    + '</tr>'
+                ;
+            };
+            output += '</table>'
+                + '第' + pager.current + '页/共' + pager.max + '页 '
+                + pager.navigateBar(function(i, cur){
+                    if(cur)
+                        return ('[<font color="#FF0000">' + i + '</font>]');
+                    else
+                        return ('[<a href="/' + (new Date().getTime())
+                            + '/msgcenter/plaintext/' + i + '">' + i + '</a>]')
+                        ;
+                    }
+                )
+                + '<br /><table><tr><td>选中项目：</td>'
+                + '<td><select name="do">'
+                +   '<option value="passphrase" selected>加密，使用临时输入的口令</option>'
+                +   '<option value="codebook">加密，指定一个或多个收件人，使用密码本</option>'
+                +   '<option value="sign">使用公钥签署，但不加密</option>'
+                +   '<option value="remove">删除</option>'
+                + '</select></td>'
+                + '<td><button type="submit">操作</button></td>'
+                + '</tr></table>'
+                + '</form>'
             ;
         };
-        output += '</table>'
-            + '第' + pager.current + '页/共' + pager.max + '页 '
-            + pager.navigateBar(function(i, cur){
-                if(cur)
-                    return ('[<font color="#FF0000">' + i + '</font>]');
-                else
-                    return ('[<a href="/' + (new Date().getTime())
-                        + '/msgcenter/plaintext/' + i + '">' + i + '</a>]')
-                    ;
-                }
-            )
-            + '<br /><table><tr><td>选中项目：</td>'
-            + '<td><select name="do">'
-            +   '<option value="passphrase" selected>加密，使用临时输入的口令</option>'
-            +   '<option value="codebook">加密，指定一个或多个收件人，使用密码本</option>'
-            +   '<option value="sign">使用公钥签署，但不加密</option>'
-            +   '<option value="remove">删除</option>'
-            + '</select></td>'
-            + '<td><button type="submit">操作</button></td>'
-            + '</tr></table>'
-            + '</form>'
-        ;
 
         respond(null, output);
     });

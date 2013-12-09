@@ -1,3 +1,15 @@
+/*
+ * Process plaintext messages
+ *
+ * There are 2 types of processing:
+ *  1. Remove. This will lead to selected message(s) deleted.
+ *  2. Encrypt. Selected messages will be encrypted, depending on desired
+ *     methods, which the user will choose to encrypt given messages.
+ *     After encryption, the user will be redirected(via a 302 redirection) to
+ *     the sending page, just like after composing the user will be redirected
+ *     to this page.
+ */
+
 function akashicForm(ids, phase, action){
     /* Use between phases, to let the server program recall what to do. */
     var kvs = {
