@@ -197,7 +197,7 @@ function remove(queues, ids, phase, post, respond){
     };
 
     if(0 == phase){
-        output = '确定删除' + ids.length + '条待发消息？'
+        output = '确定删除' + ids.length + '条待加密的消息？'
             + '<form method="POST" action="/' + (new Date().getTime()) + '/msgcenter/plaintext/-/do">'
             + akashicForm(ids, phase, 'remove')
             + '<table><tr><td><button type="submit" name="confirm" value="y">确定</button></td>'
@@ -262,7 +262,7 @@ module.exports = function(queues, parameter, post, respond, urlcommand){
             passphrase(queues, objectIDs, phase, post, respond); 
             break;
         default:
-            respond(null, 'not-implemented');
+            backToIndex();
             break;
     };
 };
