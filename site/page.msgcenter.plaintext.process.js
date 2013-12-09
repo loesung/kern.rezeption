@@ -9,13 +9,14 @@
  *     the sending page, just like after composing the user will be redirected
  *     to this page.
  */
-function encryptAndDeleter(ipc, type, opts){
+function encryptAndDeleter(ipc, msgid, type, opts){
     return function(callback){
         String('Encrypt a piece of plaintext, ' 
             + 'and delete the original if successfully encrypted.').DEBUG();
 
         var workflow = [];
 
+        // try to submit encrypt request
         workflow.push(function(cb){
             ipc.request('/encrypt/' + type, function(err, packet){
                 if(null != err || packet.response.statusCode != 200){
@@ -33,10 +34,13 @@ function encryptAndDeleter(ipc, type, opts){
             } ,opts);
         });
 
+        // if obtained ciphertext, insert to queue `send.proceeded`.
         workflow.push(function(data, cb){
             console.log(data);
             cb(null, data);
         });
+
+        // then delete orginal from queue
 
         $.nodejs.async.waterfall(workflow, callback);
     };
@@ -135,6 +139,7 @@ function passphrase(queues, ids, phase, post, respond){
                 // Add a task of encrypt and delete a plaintext.
                 task.push(encryptAndDeleter(
                     IPC['geheimdienst'],
+                    id,
                     'key',
                     {post: post}
                 ));
