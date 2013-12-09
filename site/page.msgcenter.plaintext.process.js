@@ -9,6 +9,38 @@
  *     the sending page, just like after composing the user will be redirected
  *     to this page.
  */
+function encryptAndDeleter(ipc, type, opts){
+    return function(callback){
+        String('Encrypt a piece of plaintext, ' 
+            + 'and delete the original if successfully encrypted.').DEBUG();
+
+        var workflow = [];
+
+        workflow.push(function(cb){
+            ipc.request('/encrypt/' + type, function(err, packet){
+                if(null != err || packet.response.statusCode != 200){
+                    String(
+                        'Encryption failed. '
+                        + 'StatusCode: ' + packet.response.statusCode
+                    ).DEBUG();
+
+                    cb(true);
+                    return;
+                };
+                packet.on('ready', function(data){
+                    cb(null, data);
+                });
+            } ,opts);
+        });
+
+        workflow.push(function(data, cb){
+            console.log(data);
+            cb(null, data);
+        });
+
+        $.nodejs.async.waterfall(workflow, callback);
+    };
+};
 
 function akashicForm(ids, phase, action){
     /* Use between phases, to let the server program recall what to do. */
@@ -64,8 +96,61 @@ function passphrase(queues, ids, phase, post, respond){
             respond(302, '/msgcenter/plaintext');
             return;
         };
-        console.log(ids, post);
-        respond(null, 'I\'m working on this.');
+        var workflow = [], password;
+
+        // check password validity
+        workflow.push(function(cb){
+            password = new 
+                $.nodejs.buffer.Buffer(post.parsed.password).toString('hex');
+            cb(null);
+        });
+        
+        // retrive message body
+        workflow.push(function(cb){
+            var task = {};
+            for(var i in ids){
+                task[ids[i]] = (function(){
+                    var itemID = ids[i];
+                    return function(callback){
+                        queues.send.pending.query(itemID, callback);
+                    };
+                })();
+            };
+            $.nodejs.async.parallel(task, cb);
+        });
+
+        // deploy tasks
+        workflow.push(function(result, cb){
+            var task = [], post;
+            for(var id in result){
+                // configure encryption options
+                post = $.nodejs.querystring.stringify({
+                    key: password,
+                    plaintext:
+                        new $.nodejs.buffer.Buffer(
+                            result[id].data
+                        ).toString('hex')
+                });
+
+                // Add a task of encrypt and delete a plaintext.
+                task.push(encryptAndDeleter(
+                    IPC['geheimdienst'],
+                    'key',
+                    {post: post}
+                ));
+            };
+
+            $.nodejs.async.parallel(task, function(err, result){
+                cb(null);
+            });
+        });
+
+        // carry out tasks!
+        $.nodejs.async.waterfall(workflow, function(err, result){
+            respond(null, 'I\'m working on this.');
+        });
+
+        // End of bulk encryption.
     }; 
 };
 

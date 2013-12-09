@@ -39,7 +39,8 @@ module.exports = function(e, matchResult, rueckruf){
             return;
         };
         if(null != err){
-            content = '错误，可能是连接不到消息队列。';
+            if(!content)
+                content = '错误，可能是连接不到消息队列。';
         };
         outputPage(e, {
             title: '消息队列',
