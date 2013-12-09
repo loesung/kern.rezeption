@@ -32,7 +32,19 @@ function akashicForm(ids, phase, action){
  * Encrypt using passphrase
  */
 function passphrase(queues, ids, phase, post, respond){
+    var output = '';
+    if(0 == phase){
+        output = '&gt;&gt; 即将使用临时口令加密 <font color="#FF0000">'
+            + ids.length
+            + '</font> 条密文。<br />'
 
+            + '<form method="POST" action="/' + (new Date().getTime()) + '/msgcenter/plaintext/-/do">'
+            + akashicForm(ids, phase, 'passphrase')
+            + '请输入密码：'
+            + '</form>'
+        ;
+        respond(null, output);
+    }; 
 };
 
 /*
