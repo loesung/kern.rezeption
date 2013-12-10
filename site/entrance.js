@@ -12,7 +12,7 @@ outputPage = function(e, data){
     };
     function navigate_link(name, target){
         var ret = '<form action="/' + (new Date().getTime()) + target + '"><tr><td>';
-        if(realPathname == target)
+        if(realPathname.substr(1, target.length-1) == target.substr(1))
             ret += ('<button class="navbutton btn-active" type="submit">' + name + '</button>');
         else
             ret += ('<button class="navbutton btn-normal" type="submit">' + name + '</button>');
@@ -27,7 +27,7 @@ outputPage = function(e, data){
     };
     var menu
         = navigate_bar()
-        + navigate_link('首页', '/')
+        + navigate_link('首页', '/home')
         + navigate_bar()
         + navigate_link('消息队列', '/msgcenter')
         + navigate_link('撰写信息', '/compose')

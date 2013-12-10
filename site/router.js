@@ -1,5 +1,5 @@
 var httpRouterTable = {
-    '^(\/[0-9]+)?\/?\\??$': require('./page.index.js'),
+    '^(\/[0-9]+)?(\/home)?\/?\\??$': require('./page.index.js'),
     '^(\/[0-9]+)?\/msgcenter((\/(encrypted|decrypted|ciphertext|plaintext))(\/([0-9a-f\-]+)(\/(do|send|remove|codebook|passphrase|sign))?)?)?\/?\\??$': 
         require('./page.msgcenter.js'),
     '^(\/[0-9]+)?\/compose\/?\\??$': require('./page.compose.js'),

@@ -38,7 +38,8 @@ module.exports = function(queues, parameter, post, respond){
             + '</tr>'
         ;
 
-        if(result.length < 1){
+        var disableFunctions = (result.length < 1);
+        if(disableFunctions){
             output += '<tr><td colspan="3">'
                 + '当前没有项目</td></tr>'
                 + '</table></form>';
@@ -66,18 +67,21 @@ module.exports = function(queues, parameter, post, respond){
                         ;
                     }
                 )
-                + '<br /><table><tr><td>选中项目：</td>'
-                + '<td><select name="do">'
-                +   '<option value="passphrase" selected>加密，使用临时输入的口令</option>'
-                +   '<option value="codebook">加密，指定一个或多个收件人，使用密码本</option>'
-                +   '<option value="sign">使用公钥签署，但不加密</option>'
-                +   '<option value="remove">删除</option>'
-                + '</select></td>'
-                + '<td><button type="submit">操作</button></td>'
-                + '</tr></table>'
-                + '</form>'
             ;
         };
+
+        output += ''
+            + '<br /><table><tr><td>选中项目：</td>'
+            + '<td><select name="do"' + (disableFunctions?' disabled="disabled"':'') + '>'
+            +   '<option value="passphrase" selected>加密，使用临时输入的口令</option>'
+            +   '<option value="codebook">加密，指定一个或多个收件人，使用密码本</option>'
+            +   '<option value="sign">使用公钥签署，但不加密</option>'
+            +   '<option value="remove">删除</option>'
+            + '</select></td>'
+            + '<td><button type="submit"' + (disableFunctions?' disabled="disabled"':'') + '>操作</button></td>'
+            + '</tr></table>'
+            + '</form>'
+        ;
 
         respond(null, output);
     });
