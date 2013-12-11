@@ -67,6 +67,7 @@ module.exports = function(e, matchResult, rueckruf){
                   + '.report .good{background: #00C000; color: #FFFFFF}'
                   + '.report .error{background: #BB0000; color: #FFFF00}'
                   + '.report .unknow{background: #FFDD00; color: #FF0000}'
+                  + '.hint {color: #FF3030; text-decoration: italic}'
                 + '</style>'
             ,
         });

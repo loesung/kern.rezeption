@@ -41,7 +41,7 @@ module.exports = function(queues, parameter, post, respond){
             +'<table class="report" cellspacing="0" cellpadding="0" style="font-size: 9pt">'
             + '<tr class="head">'
             +   '<td width="20%">时间</td>'
-            +   '<td>内容</td>'
+            +   '<td>内容提示</td>'
             +   '<td width="5%">选择</td>'
             + '</tr>'
         ;
@@ -58,7 +58,7 @@ module.exports = function(queues, parameter, post, respond){
                     +       '<td>' + _.format.time2Full(
                                         new Date(item.timestamp * 1000)
                         ) + '</td>'
-                    +       '<td>' + item.comment + '</td>'
+                    +       '<td class="hint">' + item.comment + '</td>'
                     +       '<td><input type="checkbox" name="item' + i + '" value="' + item.id + '"/></td>'
                     + '</tr>'
                 ;

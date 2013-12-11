@@ -58,7 +58,7 @@ module.exports = function(queues, parameter, post, respond){
                     +       '<td>' + _.format.time2Full(
                                         new Date(item.timestamp * 1000)
                         ) + '</td>'
-                    +       '<td>' + item.comment + '</td>'
+                    +       '<td>' + item.data + '<span class="hint">(' + item.comment + ')</span></td>'
                     +       '<td><input type="checkbox" name="item' + i + '" value="' + item.id + '"/></td>'
                     + '</tr>'
                 ;
