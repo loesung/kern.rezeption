@@ -110,9 +110,6 @@ module.exports = function(queues, parameter, post, respond, urlcommand){
         case 'remove':
             remove(queues, objectIDs, phase, post, respond);
             break;
-        case 'passphrase':
-            passphrase(queues, objectIDs, phase, post, respond); 
-            break;
         default:
             backToIndex();
             break;

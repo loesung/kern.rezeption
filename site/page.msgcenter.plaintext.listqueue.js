@@ -29,7 +29,14 @@ module.exports = function(queues, parameter, post, respond){
     });
 
     $.nodejs.async.waterfall(workflow, function(err, result){
-        var output = '<form method="POST" action="/' + (new Date().getTime()) + '/msgcenter/plaintext/-/do">'
+        var output;
+        if(null != err){
+            output = '错误：无法连接到数据中心。';
+            respond(err, output);
+            return;
+        };
+
+        output = '<form method="POST" action="/' + (new Date().getTime()) + '/msgcenter/plaintext/-/do">'
             +'<table class="report" cellspacing="0" cellpadding="0" style="font-size: 9pt">'
             + '<tr class="head">'
             +   '<td width="20%">时间</td>'
@@ -51,7 +58,7 @@ module.exports = function(queues, parameter, post, respond){
                     +       '<td>' + _.format.time2Full(
                                         new Date(item.timestamp * 1000)
                         ) + '</td>'
-                    +       '<td>' + item.data + '</td>'
+                    +       '<td>' + item.comment + '</td>'
                     +       '<td><input type="checkbox" name="item' + i + '" value="' + item.id + '"/></td>'
                     + '</tr>'
                 ;

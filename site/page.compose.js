@@ -31,7 +31,7 @@ module.exports = function(e, matchResult, rueckruf){
                 : content,
             head
                 : '<style type="text/css">'
-                +   'form textarea{background: #FFFFCC}'
+                +   'form textarea,input{background: #FFFFCC}'
                 + '</style>'
             ,
         });

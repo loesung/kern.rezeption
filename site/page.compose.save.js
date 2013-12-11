@@ -5,15 +5,25 @@ module.exports = function(queues, post, respond){
     var workflow = [];
 
     workflow.push(function(callback){
-        queues.send.pending.push(post.parsed.content, callback);
+        String('Command on pushing a new message to queue.').DEBUG();
+        queues.send.pending.push(
+            post.parsed.content,
+            post.parsed.comment,
+            callback
+        );
     });
 
     workflow.push(function(json, callback){
         if(!$.types.isObject(json)){
+            String('Expected queue add result failed.').DEBUG();
+            String('Unable to insert new message into send.pending queue.')
+                .ERROR()
+            ;
             callback(true, '错误：没能将消息插入发送队列。');
             return;
         };
 
+        String('New message inserted into send.pending queue.').DEBUG();
         var queueID = json.id;
         delete json;
 

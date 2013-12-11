@@ -9,7 +9,7 @@
  *     the sending page, just like after composing the user will be redirected
  *     to this page.
  */
-function encryptAndDeleter(queues, ipc, msgid, type, opts){
+function encryptAndDeleter(queues, ipc, msgid, comment, type, opts){
     return function(callback){
         String('Encrypt a piece of plaintext, ' 
             + 'and delete the original if successfully encrypted.').DEBUG();
@@ -20,10 +20,7 @@ function encryptAndDeleter(queues, ipc, msgid, type, opts){
         workflow.push(function(cb){
             ipc.request('/encrypt/' + type, function(err, packet){
                 if(null != err || packet.response.statusCode != 200){
-                    String(
-                        'Encryption failed. '
-                        + 'StatusCode: ' + packet.response.statusCode
-                    ).DEBUG();
+                    String('Encryption failed. ').DEBUG();
 
                     cb(true);
                     return;
@@ -31,7 +28,7 @@ function encryptAndDeleter(queues, ipc, msgid, type, opts){
                 packet.on('ready', function(data){
                     cb(null, data);
                 });
-            } ,opts);
+            }, opts);
         });
 
         // if obtained ciphertext, insert to queue `send.proceeded`.
@@ -44,7 +41,7 @@ function encryptAndDeleter(queues, ipc, msgid, type, opts){
             };
             if(ciphertext.length <= 0) return cb(true);
 
-            queues.send.proceeded.push(ciphertext, function(err){
+            queues.send.proceeded.push(ciphertext, comment, function(err){
                 cb(err);
             });
         });
@@ -154,6 +151,7 @@ function passphrase(queues, ids, phase, post, respond){
                     queues,
                     IPC['geheimdienst'],
                     id,
+                    result[id].comment,
                     'key',
                     {post: post}
                 ));
