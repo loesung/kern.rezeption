@@ -1,6 +1,6 @@
 var handlers = {
-    listQueue: require('./page.msgcenter.encrypted.listqueue.js'),
-    process: require('./page.msgcenter.encrypted.process.js'),
+    listQueue: require('./page.msgcenter.ciphertext.listqueue.js'),
+    process: require('./page.msgcenter.ciphertext.process.js'),
 };
 
 
