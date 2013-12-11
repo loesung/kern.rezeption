@@ -1,6 +1,7 @@
 var handlers = {};
 
 handlers.get = require('./page.contact.get.js');
+handlers.add = require('./page.contact.add.js');
 handlers.detail = require('./page.contact.detail.js');
 handlers.remove = require('./page.contact.remove.js');
 
@@ -50,6 +51,10 @@ module.exports = function(e, matchResult, rueckruf){
             case 'remove':
                 subtitle = "删除联系人";
                 waitAndRespond(handlers.remove);
+                break;
+            case 'add':
+                subtitle = "添加联系人";
+                waitAndRespond(handlers.add);
                 break;
             default:
                 respond(null, '错误：未识别的操作命令。site/page.contact.js');

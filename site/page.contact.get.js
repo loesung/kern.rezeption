@@ -29,21 +29,35 @@ function tablize(list, showPage){
         ;
     };
 
-    for(var i in list){
+    if(list.length > 0){
+        for(var i in list){
+            ret += ''
+                + '<form method="POST" action="/' + (new Date().getTime()) + '/contact/detail">'
+                + '<input style="display: none" type="hidden" name="id" value="' + list[i].id + '"/>'
+                + '<tr>'
+                + '<td>' + shortID(list[i].id) + '</td>'
+                + '<td>' + list[i].name + '</td>'
+                + '<td>'
+                +   '<button type="submit">查看详情</button>'
+                + '</td>'
+                + '</tr>'
+                + '</form>' 
+            ;
+        };
+    } else {
         ret += ''
-            + '<form method="POST" action="/' + (new Date().getTime()) + '/contact/detail">'
-            + '<input style="display: none" type="hidden" name="id" value="' + list[i].id + '"/>'
-            + '<tr>'
-            + '<td>' + shortID(list[i].id) + '</td>'
-            + '<td>' + list[i].name + '</td>'
-            + '<td>'
-            +   '<button type="submit">查看详情</button>'
-            + '</td>'
-            + '</tr>'
-            + '</form>' 
+            + '<tr><td colspan="3">当前无联系人</td></tr>'
         ;
     };
-    ret += '</table>';
+    ret += ''
+        + '</table>'
+
+        + '<form method="POST" action="/' + (new Date().getTime()) + '/contact/add">'
+        + '<table><tr><td>新增联系人：请输入名称</td><td>'
+        + '<input name="name" type="text" size="50" /></td>'
+        + '<td><button type="submit">增加</button></td></tr></table>'
+        + '</form>'
+    ;
     return ret;
 };
 
