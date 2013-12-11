@@ -3,7 +3,7 @@ module.exports = function(queues, parameter, post, respond){
     var workflow = [];
     var pager = null;
 
-    workflow.push(queues.send.pending.list);
+    workflow.push(queues.receive.proceeded.list);
 
     workflow.push(function(list, callback){
         list.sort(function(a, b){

@@ -1,6 +1,8 @@
 var handlers = {
     plaintext: require('./page.msgcenter.plaintext.js'),
     encrypted: require('./page.msgcenter.encrypted.js'),
+    ciphertext: require('./page.msgcenter.ciphertext.js'),
+    decrypted: require('./page.msgcenter.decrypted.js'),
 };
 
 function index(callback){
