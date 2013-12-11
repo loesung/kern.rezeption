@@ -39,35 +39,34 @@ module.exports = function(e, matchResult, rueckruf){
                 ['datenbank',       '数据中心',     '提供对机要信息和系统配置的存储服务。'],
             ];
 
-            content += '<table class="report" cellspacing="0px" cellpadding="3px">'
+            content += '<table class="report" cellspacing="0px" cellpadding="1px">'
                 + '<tr class="head">'
-                  + '<td width="20%">项目</td>'
-                  + '<td width="15%">状态</td>'
+                  + '<td width="15%">项目</td>'
+                  + '<td width="10%">操作</td>'
                   + '<td>解释</td>'
                 + '</tr>'
             ;
-            function showState(what){
-                var className = '', desc = '';
-                switch(what){
+            
+            for(var each in list){
+                var className = '', operation = '';
+                switch(states[list[each][0]]){
                     case true:
                         className = 'good';
-                        desc = '正常运行';
+                        operation = '<button class="navbutton btn-normal" type="submit" name="action" value="stop">停止</button>';
                         break;
                     case false:
                         className = 'error';
-                        desc = '无法连通';
+                        operation = '<button class="navbutton btn-normal" type="submit" name="action" value="start">启动</button>';
                         break;
                     default:
                         className = 'unknow';
                         desc = '未知';
                         break;
                 };
-                return '<td class="switch ' + className + '">' + desc + '</td>';
-            };
-            for(var each in list){
+
                 content += '<tr>'
-                content += '<td>' + list[each][1] + '</td>'
-                    + showState(states[list[each][0]])
+                content += '<td class="switch ' + className + '">' + list[each][1] + '</td>'
+                    + '<td>' + operation + '</td>'
                     + '<td>' + list[each][2] + '</td>'
                 ;
                 content += '</tr>';
@@ -85,13 +84,14 @@ module.exports = function(e, matchResult, rueckruf){
             ,
             head
                 : '<style type="text/css">'
-                  + '.report{border: #CCCCCC 1px solid; width: 100%}'
+                  + '.report{border: #CCCCCC 1px solid; width: 100%; font-size: 9pt}'
                   + '.report td{border: #CCCCCC 0.5px solid;}'
                   + '.report .head{background: #CCCCCC;}'
                   + '.report .switch{font-weight: bold; text-align: center}'
                   + '.report .good{background: #00C000; color: #FFFFFF}'
                   + '.report .error{background: #BB0000; color: #FFFF00}'
                   + '.report .unknow{background: #FFDD00; color: #FF0000}'
+                  + '.report button{text-align: center;}'
                 + '</style>'
             ,
         });
