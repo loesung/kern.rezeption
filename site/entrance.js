@@ -8,16 +8,23 @@ outputPage = function(e, data){
     var realPathname = /^(\/[0-9]+)?(.+)$/.exec(e.url.pathname)[2];
 
     function navigate_bar(){
-        return '<tr><td class="navbar"></td></tr>';
+        return '<tr><td colspan="2" class="navbar"></td></tr>';
     };
     function navigate_link(name, target){
-        var ret = '<form action="/' + (new Date().getTime()) + target + '"><tr><td>';
+        var ret = '<form action="/' + (new Date().getTime()) + target + '"><tr><td colspan="2">';
         if(realPathname.substr(1, target.length-1) == target.substr(1))
             ret += ('<button class="navbutton btn-active" type="submit">' + name + '</button>');
         else
             ret += ('<button class="navbutton btn-normal" type="submit">' + name + '</button>');
         ret += "</td></tr></form>";
         return ret;
+    };
+    function navigateWriteSection(){
+        return '<tr><form action="/' + (new Date().getTime()) + '/msgcenter">'
+            + '<td><button class="navbutton btn-normal" type="submit">消息队列</button></td></form>'
+            + '<form action="/' + (new Date().getTime()) + '/compose"><td>'
+            + '<button class="navbutton btn-normal" type="submit">撰写</button></td></form></tr>'
+        ;
     };
     function section(name, content){
         return (
@@ -29,8 +36,9 @@ outputPage = function(e, data){
         = navigate_bar()
         + navigate_link('首页', '/home')
         + navigate_bar()
-        + navigate_link('消息队列', '/msgcenter')
-        + navigate_link('撰写信息', '/compose')
+//        + navigate_link('消息队列', '/msgcenter')
+//        + navigate_link('撰写信息', '/compose')
+        + navigateWriteSection()
         + navigate_link('管理联系人和密钥', '/contact')
         + navigate_bar()
         + navigate_link('系统日志', '/log')
