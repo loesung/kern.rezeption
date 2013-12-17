@@ -39,7 +39,7 @@ function showReceiver(receiverID, callback){
             content += '<tr>';
 
             content += '<td>';
-            if(/^(internet)$/.test(idInfo.catalog))
+            if(/^(internet|satellite|mobile)$/.test(idInfo.catalog))
                 content += '<img src="/static/catalog.'
                     + idInfo.catalog + '.png"></img>';
             content += '</td>';
