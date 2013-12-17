@@ -23,6 +23,8 @@ function showReceiver(receiverID, callback){
             + receiverID + '</font> 联系所用的信道。'
             + '<table class="report" cellspacing="0px" cellpadding="3px">'
             + '<tr class="head">'
+            + '<td width="10%">类型</td>'
+            + '<td width="10%">方式</td>'
             + '<td width="10%">协议</td>'
             + '<td>说明</td>'
             + '</tr>'
@@ -34,16 +36,29 @@ function showReceiver(receiverID, callback){
             tunnelInfo = tunnels.info(tunnelID);
             if(!tunnelInfo) continue;
 
-            content += '<tr><td>';
+            content += '<tr>';
 
+            content += '<td>';
+            if(/^(internet)$/.test(idInfo.catalog))
+                content += '<img src="/static/catalog.'
+                    + idInfo.catalog + '.png"></img>';
+            content += '</td>';
+
+            content += '<td>';
+            if(/^(im|email|web)$/.test(idInfo.method))
+                content += '<img src="/static/method.'
+                    + idInfo.method + '.png"></img>';
+            content += '</td>';
+            
+            content += '<td>';
             if(/^(xmpp)$/.test(idInfo.protocol))
                 content += '<img src="/static/protocol.'
                     + idInfo.protocol + '.png"></img>';
+            else
+                content += idInfo.protocol;
+            content += '</td>';
 
-            content += '</td>'
-                + '<td>' + tunnelInfo.description + '</td>'
-                + '</tr>'
-            ;
+            content += '<td>' + tunnelInfo.description + '</td></tr>';
         };
 
         content += '</table>';
