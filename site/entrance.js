@@ -20,10 +20,12 @@ outputPage = function(e, data){
         return ret;
     };
     function navigateWriteSection(){
+        var class1 = ((realPathname.substr(1, 9) == 'msgcenter')?'btn-active':'btn-normal'),
+            class2 = ((realPathname.substr(1, 7) == 'compose')?'btn-active':'btn-special');
         return '<tr><form action="/' + (new Date().getTime()) + '/msgcenter">'
-            + '<td><button class="navbutton btn-normal" type="submit">消息队列</button></td></form>'
+            + '<td><button class="navbutton ' + class1 + '" type="submit">消息队列</button></td></form>'
             + '<form action="/' + (new Date().getTime()) + '/compose"><td>'
-            + '<button class="navbutton btn-normal" type="submit">撰写</button></td></form></tr>'
+            + '<button class="navbutton ' + class2 + '" type="submit">撰写</button></td></form></tr>'
         ;
     };
     function section(name, content){
@@ -64,7 +66,8 @@ outputPage = function(e, data){
             + '.fullWidth{width: 99%;}'
             + '.navbutton {margin-bottom: 0px; padding: 0px; border: none; width: 100%; font-size: 9pt}'
             + '.btn-normal{background: #3333CC;color: #FFFFFF; text-decoration:none}'
-            + '.btn-active{background: #DDDDFF;color: #000000; text-decoration:none;}'
+            + '.btn-special{background: #00AA00;color: #FFFFFF; text-decoration:none;}'
+            + '.btn-active{background: #DDDDFF;color: #000000; text-decoration:none; font-weight:bold}'
             + '.navbar{padding-top: 3px;}'
             + 'input[type="hidden"]{display: none}'
             + '.leftLine{border-left:#CCCCCC 1px solid;}'
