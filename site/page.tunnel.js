@@ -48,6 +48,8 @@ function showReceiver(receiverID, callback){
             if(/^(im|email|web)$/.test(idInfo.method))
                 content += '<img src="/static/method.'
                     + idInfo.method + '.png"></img>';
+            else
+                content += '其他';
             content += '</td>';
             
             content += '<td>';
