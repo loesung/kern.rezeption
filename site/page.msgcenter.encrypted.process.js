@@ -35,7 +35,13 @@ function send(queues, ids, phase, post, respond){
      */
     if(phase == 0){
         // display user selection page
-        content = '请输入或选择接收人。';
+        content = '<form method="POST" action="/' + (new Date().getTime()) + '/msgcenter/encrypted/-/do">'
+            + akashicForm(ids, phase - 1, 'send')
+            + '<table><tr><td>为 <font color="#FF0000">' + ids.length +  '</font> 条消息输入或选择接收人：'
+            + '</td><td><input type="text" name="search" /></td>'
+            + '<td><button type="submit">提交</button></td></tr></table>'
+            + '</form>'
+        ;
     } else if(phase == 1){
         if(null == tunnels){
             content = '当前尚未在通讯系统中找到为ID <font color="#FF0000">'
@@ -90,6 +96,9 @@ function send(queues, ids, phase, post, respond){
 
             content += '</table>';
         };
+
+    } else {
+    };
 
     respond(null, content);
 };
