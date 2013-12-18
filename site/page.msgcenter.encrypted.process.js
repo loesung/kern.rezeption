@@ -24,6 +24,75 @@ function akashicForm(ids, phase, action){
     return output;
 };
 
+/*
+ * Send messages to Botschaft
+ */
+function send(queues, ids, phase, post, respond){
+    /*
+     * Bei der Sendung soll der Benutzer die Richtungen auswaehlen. Als Verzug
+     * werden alle Richtungen gelistet. Dennoch koennen wir spaeter ein Filter
+     * einsetzen, wenn Empfaenger einiger Nachrichten schon eingegeben haben.
+     */
+    if(phase == 0){
+        // display user selection page
+        content = '请输入或选择接收人。';
+    } else if(phase == 1){
+        if(null == tunnels){
+            content = '当前尚未在通讯系统中找到为ID <font color="#FF0000">'
+                + receiverID
+                + '</font> 提供的通讯信道。'
+                + '<br />请检查通讯系统设置和启动情况，然后刷新页面。'
+            ;
+        } else {
+            content = '下面列出通讯系统为您提供，与用户 <font color="#FF0000">' 
+                + receiverID + '</font> 联系所用的信道。'
+                + '<table class="report" cellspacing="0px" cellpadding="3px">'
+                + '<tr class="head">'
+                + '<td width="10%">类型</td>'
+                + '<td width="10%">方式</td>'
+                + '<td width="10%">协议</td>'
+                + '<td>说明</td>'
+                + '</tr>'
+            ;
+
+            var listed = tunnels.list(), tunnelID;
+            for(var tunnelID in listed){
+                idInfo = listed[tunnelID];
+                tunnelInfo = tunnels.info(tunnelID);
+                if(!tunnelInfo) continue;
+
+                content += '<tr>';
+
+                content += '<td>';
+                if(/^(internet|satellite|mobile)$/.test(idInfo.catalog))
+                    content += '<img src="/static/catalog.'
+                        + idInfo.catalog + '.png"></img>';
+                content += '</td>';
+
+                content += '<td>';
+                if(/^(im|email|web)$/.test(idInfo.method))
+                    content += '<img src="/static/method.'
+                        + idInfo.method + '.png"></img>';
+                else
+                    content += '其他';
+                content += '</td>';
+                
+                content += '<td>';
+                if(/^(xmpp)$/.test(idInfo.protocol))
+                    content += '<img src="/static/protocol.'
+                        + idInfo.protocol + '.png"></img>';
+                else
+                    content += idInfo.protocol;
+                content += '</td>';
+
+                content += '<td>' + tunnelInfo.description + '</td></tr>';
+            };
+
+            content += '</table>';
+        };
+
+    respond(null, content);
+};
 
 /*
  * Remove selected messages
@@ -109,6 +178,9 @@ module.exports = function(queues, parameter, post, respond, urlcommand){
     switch(action){
         case 'remove':
             remove(queues, objectIDs, phase, post, respond);
+            break;
+        case 'send':
+            send(queues, objectIDs, phase, post, respond);
             break;
         default:
             backToIndex();

@@ -75,11 +75,8 @@ module.exports = function(queues, parameter, post, respond){
                     }
                 )
                 + '<br /><table><tr><td>选中项目：</td>'
-                + '<td><select name="do">'
-                +   '<option value="send">选择信道并发送</option>'
-                +   '<option value="remove">删除</option>'
-                + '</select></td>'
-                + '<td><button type="submit">操作</button></td>'
+                + '<td><button type="submit" class="navbutton" name="do" value="remove">删除</button></td>'
+                + '<td><button type="submit" class="navbutton btn-special" name="do" value="send">选择信道并发送</button></td>'
                 + '</tr></table>'
                 + '</form>'
             ;
