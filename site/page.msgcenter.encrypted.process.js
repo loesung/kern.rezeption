@@ -35,11 +35,26 @@ function send(queues, ids, phase, post, respond){
      */
     if(phase == 0){
         // display user selection page
+        var choice = post.parsed['choice'],
+            keyword = post.parsed['keyword'];
+
+        switch(choice){
+            case 'search':
+                
+                break;
+            case 'cancel':
+                respond(302, '/msgcenter/encrypted');
+                break;
+            default:
+                break;
+        };
         content = '<form method="POST" action="/' + (new Date().getTime()) + '/msgcenter/encrypted/-/do">'
             + akashicForm(ids, phase - 1, 'send')
             + '<table><tr><td>为 <font color="#FF0000">' + ids.length +  '</font> 条消息输入或选择接收人：'
-            + '</td><td><input type="text" name="search" /></td>'
-            + '<td><button type="submit">提交</button></td></tr></table>'
+            + '</td><td><input type="text" name="keyword" /></td>'
+            + '<td><button type="submit" name="choice" value="search">提交</button></td>'
+            + '<td><button type="submit" name="choice" value="cancel">取消</button></td>'
+            + '</tr></table>'
             + '</form>'
         ;
     } else if(phase == 1){
