@@ -33,28 +33,62 @@ function send(queues, ids, phase, post, respond){
      * werden alle Richtungen gelistet. Dennoch koennen wir spaeter ein Filter
      * einsetzen, wenn Empfaenger einiger Nachrichten schon eingegeben haben.
      */
+    var workflow = [];
+
     if(phase == 0){
         // display user selection page
-        var choice = post.parsed['choice'],
-            keyword = post.parsed['keyword'];
+        var isPost = (null != post);
+        var choice = (isPost?post.parsed['choice']:false),
+            keyword = (isPost?post.parsed['keyword']:false),
+            akashicIDs = ids.slice(0, ids.length),
+            receiverList = [];
+
+        if(isPost){
+            // extract the intended receiver, and remove items
+            var value,
+                isReceiverID = /^[0-9a-f]+$/i;
+            for(var key in post.parsed){
+                value = post.parsed[key];
+                if(!isReceiverID.test(value)) continue;
+                if(key.substr(0, 8) == 'receiver')
+                    receiverList.push(value);
+            };
+        };
 
         switch(choice){
-            case 'search':
-                
-                break;
             case 'cancel':
                 respond(302, '/msgcenter/encrypted');
+                break;
+            case 'search':
+                receiverList.push(new Date().getTime());
                 break;
             default:
                 break;
         };
+
         content = '<form method="POST" action="/' + (new Date().getTime()) + '/msgcenter/encrypted/-/do">'
-            + akashicForm(ids, phase - 1, 'send')
+            + akashicForm(akashicIDs, phase - 1, 'send')
             + '<table><tr><td>为 <font color="#FF0000">' + ids.length +  '</font> 条消息输入或选择接收人：'
             + '</td><td><input type="text" name="keyword" /></td>'
             + '<td><button type="submit" name="choice" value="search">提交</button></td>'
             + '<td><button type="submit" name="choice" value="cancel">取消</button></td>'
             + '</tr></table>'
+            + '<table><tr><td colspan="3">已选定的接收人：</td></tr>'
+        ;
+
+        if(receiverList.length > 0){
+            for(var i in receiverList){
+                content += '<tr>'
+                    + '<td><input type="checkbox" name="receiver' + i + '" value="' + receiverList[i] + '" checked="true"/></td>'
+                    + '<td>' + receiverList[i] + '</td>'
+                    + '</tr>'
+                ;
+            };
+        } else
+            content += '<tr><td colspan="3">尚无</td></tr>';
+
+        content += ''
+            + '</table>'
             + '</form>'
         ;
     } else if(phase == 1){
