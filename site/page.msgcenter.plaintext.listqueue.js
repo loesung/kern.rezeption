@@ -78,7 +78,7 @@ module.exports = function(queues, parameter, post, respond){
         };
 
         output += ''
-            + '<br /><table><tr><td>选中项目：</td>'
+            + '<table><tr><td><a href="/' + (new Date().getTime()) + '/compose">撰写新消息</a>，或对选中项目：</td>'
             + '<td><select name="do"' + (disableFunctions?' disabled="disabled"':'') + '>'
             +   '<option value="passphrase" selected>加密，使用临时输入的口令</option>'
             +   '<option value="codebook">加密，指定一个或多个收件人，使用密码本</option>'
