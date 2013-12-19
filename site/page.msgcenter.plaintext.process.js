@@ -56,6 +56,11 @@ function encryptAndDeleter(queues, ipc, msgid, comment, type, opts){
     };
 };
 
+function doneAndRedirectToSend(ids, respond){
+    "Done encrypting and redirecting to send page.".DEBUG();
+    respond(302, '/msgcenter/encrypted/' + ids.join('.') + '/send');
+};
+
 function akashicForm(ids, phase, action){
     /* Use between phases, to let the server program recall what to do. */
     var kvs = {
@@ -164,7 +169,7 @@ function passphrase(queues, ids, phase, post, respond){
 
         // carry out tasks!
         $.nodejs.async.waterfall(workflow, function(err){
-            respond(302, '/msgcenter/plaintext');
+            doneAndRedirectToSend(ids, respond);
         });
 
         // End of bulk encryption.
@@ -190,7 +195,7 @@ function remove(queues, ids, phase, post, respond){
             })());
         };
         $.nodejs.async.parallel(task, function(err){
-            respond(302, '/msgcenter/plaintext');
+            doneAndRedirectToSend(ids, respond);
         });
     };
 

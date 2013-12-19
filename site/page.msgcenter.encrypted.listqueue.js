@@ -43,6 +43,7 @@ module.exports = function(queues, parameter, post, respond){
             +   '<td width="20%">时间</td>'
             +   '<td>内容提示</td>'
             +   '<td width="5%">选择</td>'
+            +   '<td width="5%">发送</td>'
             + '</tr>'
         ;
 
@@ -60,6 +61,7 @@ module.exports = function(queues, parameter, post, respond){
                         ) + '</td>'
                     +       '<td class="hint">' + item.comment + '</td>'
                     +       '<td><input type="checkbox" name="item' + i + '" value="' + item.id + '"/></td>'
+                    +       '<td><a href="/' + (new Date().getTime()) + '/msgcenter/encrypted/' + item.id + '/send">发送</a></td>'
                     + '</tr>'
                 ;
             };

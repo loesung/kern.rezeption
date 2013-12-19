@@ -153,7 +153,7 @@ module.exports = function(queues, parameter, post, respond, urlcommand){
     function backToIndex(){
         respond(302, '/msgcenter/encrypted');
     };
-    var isID = /^[0-9a-f]{8}\-([0-9a-f]{4}\-){3}[0-9a-f]{12}$/i;
+    var isID = /[0-9a-f]{8}\-([0-9a-f]{4}\-){3}[0-9a-f]{12}/i;
     var isPost = $.types.isObject(post);
 
     /* Determine objects being operated
@@ -161,14 +161,18 @@ module.exports = function(queues, parameter, post, respond, urlcommand){
      * - read parameter
      * Anyway, use isID.test() to filter all id.
      */
-    var objectIDs = [];
-    if(isID.test(parameter)) objectIDs.push(parameter.toLowerCase());
+    var objectIDs = [],
+        parameters = parameter.split('.');
+    for(var i in parameters)
+        if(isID.test(parameters[i]))
+            objectIDs.push(parameters[i].toLowerCase());
     if(isPost){
         for(var key in post.parsed){
             if(isID.test(post.parsed[key]))
                 objectIDs.push(post.parsed[key].toLowerCase());
         };
     };
+    console.log(post, objectIDs);
     if(objectIDs.length < 1) return backToIndex();
 
     /* Determine action: send(codebook, ...), or remove */
