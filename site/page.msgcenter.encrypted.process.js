@@ -70,17 +70,18 @@ function send(queues, ids, phase, post, respond){
             + akashicForm(akashicIDs, phase - 1, 'send')
             + '<table><tr><td>为 <font color="#FF0000">' + ids.length +  '</font> 条消息输入或选择接收人：'
             + '</td><td><input type="text" name="keyword" /></td>'
-            + '<td><button type="submit" name="choice" value="search">提交</button></td>'
-            + '<td><button type="submit" name="choice" value="cancel">取消</button></td>'
+            + '<td><button class="navbutton" type="submit" name="choice" value="search">搜索</button></td>'
+            + '<td><button class="navbutton btn-special">发送</button></td>'
+            + '<td><button class="navbutton" type="submit" name="choice" value="cancel">取消</button></td>'
             + '</tr></table>'
-            + '<table><tr><td colspan="3">已选定的接收人：</td></tr>'
+            + '<table cellspacing="0" cellpadding="0"><tr><td>已选定的接收人（去掉勾选则删除）：</td></tr>'
         ;
 
         if(receiverList.length > 0){
             for(var i in receiverList){
                 content += '<tr>'
-                    + '<td><input type="checkbox" name="receiver' + i + '" value="' + receiverList[i] + '" checked="true"/></td>'
-                    + '<td>' + receiverList[i] + '</td>'
+                    + '<td><input type="checkbox" name="receiver' + i + '" value="' + receiverList[i] + '" checked="true"/>'
+                    + '' + receiverList[i] + '</td>'
                     + '</tr>'
                 ;
             };
