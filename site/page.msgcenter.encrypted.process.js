@@ -48,6 +48,15 @@ function send(queues, ids, phase, post, respond){
         };
     };
 
+    /*
+     * TODO
+     * 1. query of identity is common for all phases, and remove in time of
+     *  those receviers who are not in list of identity.
+     * 2. use this workflow to change the terminal handler, which are of
+     *  different phases.
+     * 3. the 'send' choice of phase#0 will shift this program to next phase,
+     *  without sending back data immediately
+     */
 
     // phase of selecting intended user.
     if(phase == 0){
@@ -97,42 +106,45 @@ function send(queues, ids, phase, post, respond){
             // done
         };
 
-        $.nodejs.async.waterfall(workflow, function(err, result){
-            content = '<form method="POST" action="/' + (new Date().getTime()) + '/msgcenter/encrypted/-/do">'
-                + akashicForm(ids, phase - 1, 'send')
-                + '<table><tr><td>为 <font color="#FF0000">' + ids.length +  '</font> 条消息输入或选择接收人：'
-                + '</td><td><input type="text" name="keyword" /></td>'
-                + '<td><button class="navbutton" type="submit" name="choice" value="search">搜索</button></td>'
-                + '<td><button class="navbutton btn-special">发送</button></td>'
-                + '<td><button class="navbutton" type="submit" name="choice" value="cancel">取消</button></td>'
-                + '</tr></table>'
-                + '<table cellspacing="0" cellpadding="0"><tr><td>已选定的接收人（去掉勾选则删除）：</td></tr>'
-            ;
+        var endHandler;
+        if(!nextPhase){
+            endHandler = function(err, result){
+                content = '<form method="POST" action="/' + (new Date().getTime()) + '/msgcenter/encrypted/-/do">'
+                    + akashicForm(ids, phase - 1, 'send')
+                    + '<table><tr><td>为 <font color="#FF0000">' + ids.length +  '</font> 条消息输入或选择接收人：'
+                    + '</td><td><input type="text" name="keyword" /></td>'
+                    + '<td><button class="navbutton" type="submit" name="choice" value="search">搜索</button></td>'
+                    + '<td><button class="navbutton btn-special">发送</button></td>'
+                    + '<td><button class="navbutton" type="submit" name="choice" value="cancel">取消</button></td>'
+                    + '</tr></table>'
+                    + '<table cellspacing="0" cellpadding="0"><tr><td>已选定的接收人（去掉勾选则删除）：</td></tr>'
+                ;
 
-            var setItem = false;
-            if(receiverList.length > 0){
-                for(var i in receiverList){
-                    if(!identityIndexed[receiverList[i]]) continue;
-                    content += '<tr>'
-                        + '<td><input type="checkbox" name="receiver' + i + '" value="' + receiverList[i] + '" checked="true"/>'
-                        + '' + identityIndexed[receiverList[i]] + '</td>'
-                        + '</tr>'
-                    ;
-                    setItem = true;
+                var setItem = false;
+                if(receiverList.length > 0){
+                    for(var i in receiverList){
+                        if(!identityIndexed[receiverList[i]]) continue;
+                        content += '<tr>'
+                            + '<td><input type="checkbox" name="receiver' + i + '" value="' + receiverList[i] + '" checked="true"/>'
+                            + '' + identityIndexed[receiverList[i]] + '</td>'
+                            + '</tr>'
+                        ;
+                        setItem = true;
+                    };
                 };
+                if(!setItem)
+                    content += '<tr><td colspan="3">尚无</td></tr>';
+
+                content += ''
+                    + '</table>'
+                    + '</form>'
+                ;
+
+                respond(null, content);
             };
-            if(!setItem)
-                content += '<tr><td colspan="3">尚无</td></tr>';
+        };
 
-            content += ''
-                + '</table>'
-                + '</form>'
-            ;
-
-            respond(null, content);
-        });
-
-        if(!nextPhase) return;
+        $.nodejs.async.waterfall(workflow, endHandler);
     };
    
 
@@ -197,8 +209,6 @@ function send(queues, ids, phase, post, respond){
 
     } else {
     };
-
-    respond(null, content);
 };
 
 /*
