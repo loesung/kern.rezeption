@@ -35,29 +35,28 @@ function send(queues, ids, phase, post, respond){
      */
     var workflow = [];
 
-    if(phase == 0){
-        // display user selection page
-        var isPost = (null != post);
-        var choice = (isPost?post.parsed['choice']:false),
-            keyword = (isPost?post.parsed['keyword']:false),
-            akashicIDs = ids.slice(0, ids.length),
-            receiverList = [];
 
-        if(isPost){
-            // extract the intended receiver, and remove items
-            var value,
-                isReceiverID = /^[0-9a-f]+$/i;
-            for(var key in post.parsed){
-                value = post.parsed[key];
-                if(!isReceiverID.test(value)) continue;
-                if(key.substr(0, 8) == 'receiver')
-                    receiverList.push(value);
-            };
+    var receiverList = [],
+        isPost = (null != post);
+    if(isPost){
+        // extract the intended receiver
+        var value, isReceiverID = /^[0-9a-f]+$/i;
+        for(var key in post.parsed){
+            value = post.parsed[key];
+            if(!isReceiverID.test(value)) continue;
+            if(key.substr(0, 8) == 'receiver') receiverList.push(value);
         };
+    };
+
+
+    // phase of selecting intended user.
+    if(phase == 0){
+        var choice = (isPost?post.parsed['choice']:false),
+            keyword = (isPost?post.parsed['keyword']:false);
 
         switch(choice){
             case 'cancel':
-                respond(302, '/msgcenter/encrypted');
+                return respond(302, '/msgcenter/encrypted');
                 break;
             case 'search':
                 receiverList.push(new Date().getTime());
@@ -67,7 +66,7 @@ function send(queues, ids, phase, post, respond){
         };
 
         content = '<form method="POST" action="/' + (new Date().getTime()) + '/msgcenter/encrypted/-/do">'
-            + akashicForm(akashicIDs, phase - 1, 'send')
+            + akashicForm(ids, phase - 1, 'send')
             + '<table><tr><td>为 <font color="#FF0000">' + ids.length +  '</font> 条消息输入或选择接收人：'
             + '</td><td><input type="text" name="keyword" /></td>'
             + '<td><button class="navbutton" type="submit" name="choice" value="search">搜索</button></td>'
@@ -92,7 +91,14 @@ function send(queues, ids, phase, post, respond){
             + '</table>'
             + '</form>'
         ;
-    } else if(phase == 1){
+    };
+   
+
+    // phase may shift to 1 in the previous logic. Therefore we do NOT join
+    // them using a 'else'.
+ 
+    // phase of selecting tunnels, according to the user selection.
+    if(phase == 1){
         if(null == tunnels){
             content = '当前尚未在通讯系统中找到为ID <font color="#FF0000">'
                 + receiverID
