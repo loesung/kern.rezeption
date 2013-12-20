@@ -51,46 +51,88 @@ function send(queues, ids, phase, post, respond){
 
     // phase of selecting intended user.
     if(phase == 0){
+        var identity = _.identity(IPC['datenbank']);
         var choice = (isPost?post.parsed['choice']:false),
-            keyword = (isPost?post.parsed['keyword']:false);
+            keyword = (isPost?post.parsed['keyword']:false),
+            nextPhase = false,
+            identityIndexed = {};
 
-        switch(choice){
-            case 'cancel':
-                return respond(302, '/msgcenter/encrypted');
-                break;
-            case 'search':
-                receiverList.push(new Date().getTime());
-                break;
-            default:
-                break;
+        if(choice == 'cancel') return respond(302, '/msgcenter/encrypted');
+        
+        // query for newest identity list
+        workflow.push(identity.list);
+        workflow.push(function(json, callback){
+            for(var i in json)
+                identityIndexed[json[i].id] = json[i].name;
+            callback(null);
+        });
+
+        
+        if(choice == 'search'){
+            var keyword = (isPost?post.parsed['keyword']:false);
+
+            // decide keyword
+            if($.types.isString(keyword) && keyword.length > 3){
+                keyword = keyword.trim().toLowerCase();
+                workflow.push(function(callback){
+                    var likeID = /^[0-9a-f]{4,}$/.test(keyword),
+                        item;
+                    for(var id in identityIndexed){
+                        item = identityIndexed[id];
+                        if(likeID)
+                            if(id.toLowerCase().startsWith(keyword)){
+                                receiverList.push(id);
+                                continue;
+                            };
+                        if(item.toLowerCase().indexOf(keyword) >= 0){
+                            receiverList.push(id);
+                            continue;
+                        };
+                    };
+
+                    callback(null);
+                });
+            };
+
+            // done
         };
 
-        content = '<form method="POST" action="/' + (new Date().getTime()) + '/msgcenter/encrypted/-/do">'
-            + akashicForm(ids, phase - 1, 'send')
-            + '<table><tr><td>为 <font color="#FF0000">' + ids.length +  '</font> 条消息输入或选择接收人：'
-            + '</td><td><input type="text" name="keyword" /></td>'
-            + '<td><button class="navbutton" type="submit" name="choice" value="search">搜索</button></td>'
-            + '<td><button class="navbutton btn-special">发送</button></td>'
-            + '<td><button class="navbutton" type="submit" name="choice" value="cancel">取消</button></td>'
-            + '</tr></table>'
-            + '<table cellspacing="0" cellpadding="0"><tr><td>已选定的接收人（去掉勾选则删除）：</td></tr>'
-        ;
+        $.nodejs.async.waterfall(workflow, function(err, result){
+            content = '<form method="POST" action="/' + (new Date().getTime()) + '/msgcenter/encrypted/-/do">'
+                + akashicForm(ids, phase - 1, 'send')
+                + '<table><tr><td>为 <font color="#FF0000">' + ids.length +  '</font> 条消息输入或选择接收人：'
+                + '</td><td><input type="text" name="keyword" /></td>'
+                + '<td><button class="navbutton" type="submit" name="choice" value="search">搜索</button></td>'
+                + '<td><button class="navbutton btn-special">发送</button></td>'
+                + '<td><button class="navbutton" type="submit" name="choice" value="cancel">取消</button></td>'
+                + '</tr></table>'
+                + '<table cellspacing="0" cellpadding="0"><tr><td>已选定的接收人（去掉勾选则删除）：</td></tr>'
+            ;
 
-        if(receiverList.length > 0){
-            for(var i in receiverList){
-                content += '<tr>'
-                    + '<td><input type="checkbox" name="receiver' + i + '" value="' + receiverList[i] + '" checked="true"/>'
-                    + '' + receiverList[i] + '</td>'
-                    + '</tr>'
-                ;
+            var setItem = false;
+            if(receiverList.length > 0){
+                for(var i in receiverList){
+                    if(!identityIndexed[receiverList[i]]) continue;
+                    content += '<tr>'
+                        + '<td><input type="checkbox" name="receiver' + i + '" value="' + receiverList[i] + '" checked="true"/>'
+                        + '' + identityIndexed[receiverList[i]] + '</td>'
+                        + '</tr>'
+                    ;
+                    setItem = true;
+                };
             };
-        } else
-            content += '<tr><td colspan="3">尚无</td></tr>';
+            if(!setItem)
+                content += '<tr><td colspan="3">尚无</td></tr>';
 
-        content += ''
-            + '</table>'
-            + '</form>'
-        ;
+            content += ''
+                + '</table>'
+                + '</form>'
+            ;
+
+            respond(null, content);
+        });
+
+        if(!nextPhase) return;
     };
    
 
@@ -228,7 +270,6 @@ module.exports = function(queues, parameter, post, respond, urlcommand){
                 objectIDs.push(post.parsed[key].toLowerCase());
         };
     };
-    console.log(post, objectIDs);
     if(objectIDs.length < 1) return backToIndex();
 
     /* Determine action: send(codebook, ...), or remove */
