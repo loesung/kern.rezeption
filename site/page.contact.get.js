@@ -1,4 +1,9 @@
-function tablize(list, showPage){
+function tablize(json, showPage){
+    var list = [];
+
+    for(var i in json)
+        list.push(json[i]);
+
     list.sort(function(a,b){
         return ((a.name < b.name)?1:-1);
     });

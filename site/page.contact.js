@@ -6,7 +6,7 @@ handlers.detail = require('./page.contact.detail.js');
 handlers.remove = require('./page.contact.remove.js');
 
 module.exports = function(e, matchResult, rueckruf){
-    var identity = _.identity(IPC['datenbank']);
+    var identity = _.identity(IPC['geheimdienst']);
     var subcommand = matchResult[3];
     var subtitle = false;
 
