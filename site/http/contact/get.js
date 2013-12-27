@@ -66,13 +66,15 @@ function tablize(json, showPage){
     return ret;
 };
 
-module.exports = function(identity, callback){
-    $.nodejs.async.waterfall([
-        identity.list,
+module.exports = function(identity, callbackWrapper){
+    return function(data, callback){
+        $.nodejs.async.waterfall([
+            identity.list,
 
-        function(json, callback){
-            callback(null, tablize(json));
-        },
+            function(json, callback){
+                callback(null, tablize(json));
+            },
 
-    ], callback);
+        ], callback);
+    };
 };
