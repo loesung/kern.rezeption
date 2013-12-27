@@ -1,4 +1,4 @@
-function callHandler(handler){
+function preHandle(handler){
     return function(e, callback){
         var options = handler.__options;
         var data = {
@@ -25,21 +25,17 @@ function callHandler(handler){
     };
 };
 
-
 module.exports = function(e){
-    var httpRouter = require('./http/__init__.js')(),
-        ipcRouter = require('./ipc/__init__.js')();
+    var ipc = require('./ipc/__init__.js'),
+        http = require('./http/__init__.js');
 
     return function(callback){
-        var handler;
         console.log(e.request.url);
 
         if('http' == e.protocol)
-            handler = httpRouter(e.request.url);
+            http(e, preHandle, callback);
         else
-            handler = ipcRouter(e.request.url);
+            ipc(e, preHandle, callback);
 
-        if(!handler) return callback(400);
-        callHandler(handler)(e, callback);
     };
 };
