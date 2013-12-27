@@ -124,8 +124,11 @@ function wrapTemplate(template){
 
 var router = $.net.urlRouter();
 router
-    .handle('', wrapTemplate(require('./index.js')))
+    .handle('', require('./index.js'))
+
+    .sub('msgcenter', require('./msgcenter/__init__.js'))
 ;
+router.proxy = wrapTemplate;
 
 module.exports = function(version){
     return router;

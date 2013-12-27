@@ -12,6 +12,8 @@ module.exports = function(e){
                 'Content-Type': 'text/html',
                 'Cache-Control': 'no-cache',
             });
+
+            if(!$.types.isString(result)) result = JSON.stringify(result);
             e.response.end(result);
         }
     );
