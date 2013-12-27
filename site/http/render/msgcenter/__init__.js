@@ -6,13 +6,17 @@ function wrapTemplate(template){
         if(false)// && subcommand == target)
             return '[<font color="#FF0000">' + text + '</font>]';
         else
-            return '[<a href="/msgcenter/' + target + '?_='
+            return '[<a href="/msgcenter/' + target + '/?_='
                 + process.hrtime()[1]
                 + '">' + text + '</a>]'
             ;
     };
     return function(data){
-        var childData = template(data);
+        if($.types.isError(data))
+            var childData = data.toString();
+        else
+            var childData = template(data);
+
         return {
             title: '消息队列',
             content
@@ -46,6 +50,11 @@ function wrapTemplate(template){
 
 router
     .handle('', require('./_.js'))
+    
+    .sub('ciphertext', require('./ciphertext/__init__.js'))
+/*    .sub('plaintext', require('./plaintext/__init__.js'))
+    .sub('encrypted', require('./encrypted/__init__.js'))
+    .sub('decrypted', require('./decrypted/__init__.js'))*/
 ;
 
 router.proxy = wrapTemplate;
