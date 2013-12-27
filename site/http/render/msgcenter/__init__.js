@@ -49,7 +49,7 @@ function wrapTemplate(template){
 };
 
 router
-    .handle('', require('./_.js'))
+    .handle('', require('./_.js')())
     
     .sub('ciphertext', require('./ciphertext/__init__.js'))
 /*    .sub('plaintext', require('./plaintext/__init__.js'))

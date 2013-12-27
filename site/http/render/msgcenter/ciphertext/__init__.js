@@ -1,7 +1,9 @@
 var router = $.net.urlRouter();
+module.exports = router;
+
+var tableDrawer = require('../table.js');
 
 router
-    .handle('', require('./_.js'))
+    .handle('', require('./_.js')(tableDrawer))
 ;
 
-module.exports = router;
