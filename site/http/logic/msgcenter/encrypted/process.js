@@ -257,53 +257,55 @@ function remove(queues, ids, phase, post, respond){
 /*
  * Logic to apply job
  */
-module.exports = function(queues, parameter, post, respond, urlcommand){
-    function backToIndex(){
-        respond(302, '/msgcenter/encrypted');
-    };
-    var isID = /[0-9a-f]{8}\-([0-9a-f]{4}\-){3}[0-9a-f]{12}/i;
-    var isPost = $.types.isObject(post);
-
-    /* Determine objects being operated
-     * - if by post, read posted body.
-     * - read parameter
-     * Anyway, use isID.test() to filter all id.
-     */
-    var objectIDs = [],
-        parameters = parameter.split('.');
-    for(var i in parameters)
-        if(isID.test(parameters[i]))
-            objectIDs.push(parameters[i].toLowerCase());
-    if(isPost){
-        for(var key in post.parsed){
-            if(isID.test(post.parsed[key]))
-                objectIDs.push(post.parsed[key].toLowerCase());
+module.exports = function(queues){
+    return function(data, callback){
+        function backToIndex(){
+            respond(302, '/msgcenter/encrypted');
         };
-    };
-    if(objectIDs.length < 1) return backToIndex();
+        var isID = /[0-9a-f]{8}\-([0-9a-f]{4}\-){3}[0-9a-f]{12}/i;
+        var isPost = $.types.isObject(post);
 
-    /* Determine action: send(codebook, ...), or remove */
-    var action = urlcommand;
-    if(isPost) action = post.parsed['do'];
-    if(!/^(remove|send)$/i.test(action))
-        return backToIndex();
+        /* Determine objects being operated
+         * - if by post, read posted body.
+         * - read parameter
+         * Anyway, use isID.test() to filter all id.
+         */
+        var objectIDs = [],
+            parameters = parameter.split('.');
+        for(var i in parameters)
+            if(isID.test(parameters[i]))
+                objectIDs.push(parameters[i].toLowerCase());
+        if(isPost){
+            for(var key in post.parsed){
+                if(isID.test(post.parsed[key]))
+                    objectIDs.push(post.parsed[key].toLowerCase());
+            };
+        };
+        if(objectIDs.length < 1) return backToIndex();
 
-    /* Determine phase of process */
-    var phase = 0;
-    if(isPost){
-        if(!isNaN(post.parsed['phase']))
-            phase = Math.round(post.parsed['phase']);
-    };
+        /* Determine action: send(codebook, ...), or remove */
+        var action = urlcommand;
+        if(isPost) action = post.parsed['do'];
+        if(!/^(remove|send)$/i.test(action))
+            return backToIndex();
 
-    switch(action){
-        case 'remove':
-            remove(queues, objectIDs, phase, post, respond);
-            break;
-        case 'send':
-            send(queues, objectIDs, phase, post, respond);
-            break;
-        default:
-            backToIndex();
-            break;
+        /* Determine phase of process */
+        var phase = 0;
+        if(isPost){
+            if(!isNaN(post.parsed['phase']))
+                phase = Math.round(post.parsed['phase']);
+        };
+
+        switch(action){
+            case 'remove':
+                remove(queues, objectIDs, phase, post, respond);
+                break;
+            case 'send':
+                send(queues, objectIDs, phase, post, respond);
+                break;
+            default:
+                backToIndex();
+                break;
+        };
     };
 };

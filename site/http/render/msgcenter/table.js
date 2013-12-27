@@ -19,7 +19,7 @@ module.exports = function(pageName){
                 + '</table></form>';
         } else {
             for(var i in items){
-                var item = item[i];
+                var item = items[i];
                 output 
                     += '<tr>'
                     +       '<td>' + _.format.time2Full(
