@@ -24,7 +24,7 @@ function wrapTemplate(template){
             class2 = ((realPathname.substr(1, 7) == 'compose')?'btn-active':'btn-special');
         return '<tr><form method="post" action="/msgcenter/?_=' + process.hrtime()[1] + '">'
             + '<td><button class="navbutton ' + class1 + '" type="submit">消息队列</button></td></form>'
-            + '<form action="/compose?_' + process.hrtime()[1] + '"><td>'
+            + '<form method="post" action="/compose/write?_' + process.hrtime()[1] + '"><td>'
             + '<button class="navbutton ' + class2 + '" type="submit">撰写</button></td></form></tr>'
         ;
     };
@@ -124,6 +124,7 @@ router
     .handle('', require('./index.js'))
 
     .sub('msgcenter', require('./msgcenter/__init__.js'))
+    .sub('compose', require('./compose/__init__.js'))
 ;
 router.proxy = wrapTemplate;
 

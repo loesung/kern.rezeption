@@ -1,4 +1,4 @@
-var PER_PAGE = 2;
+var PER_PAGE = 8;
 module.exports = function(queues){
     return function(data, rueckruf){
         var workflow = [];
