@@ -13,6 +13,15 @@ module.exports = function(e){
                     });
                     e.response.end();
                     return;
+                } else if(418 == err){
+                    // something that we would like to avoid.
+                    if(null == result){
+                        e.response.writeHead(404);
+                        e.response.end();
+                    } else {
+                        e.response.writeHead(200, result.head);
+                        e.response.end(result.data);
+                    };
                 } else
                     return outputError(e, 404);
 

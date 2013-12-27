@@ -9,7 +9,7 @@ module.exports = function(e, preHandle, callback){
 
     preHandle(logicFunc)(e, function(err, result){ 
         // (err, result) corresponds to the parameter for each handler.
-        if(302 == err) return callback(err, result);
+        if(302 == err || 418 == err) return callback(err, result);
         if(!renderFunc) return callback(null, JSON.stringify(result));
         return callback(null, renderFunc(result));
     });

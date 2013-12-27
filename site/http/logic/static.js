@@ -9,26 +9,32 @@ var contentType = function(filename){
         return table[l];
 };
 
-module.exports = function(e, result, rueckruf){
-    var tester = /^[0-9a-zA-Z\.\-]+$/;
-    if(!tester.test(result[1])){
-        outputError(e, 404);
-        return;
+module.exports = function(){
+    return function(data, callback){
+        var tester = /^[0-9a-zA-Z\.\-]+$/;
+        if(!tester.test(data.get.name)){
+            outputError(e, 404);
+            return;
+        };
+        
+        var stuff = $.nodejs.fs.readFile(
+            $.process.resolvePath('./site/http/static/' + data.get.name),
+            function(err, fileData){
+                if(err){
+                    console.log(err);
+                    callback(418, null);
+                } else {
+                    callback(
+                        418,
+                        {
+                            head: {
+                                'Content-Type': contentType(data.get.name),
+                            },
+                            data: fileData
+                        }
+                    );
+                };
+            }
+        );
     };
-    
-    var stuff = $.nodejs.fs.readFile(
-        'static/' + result[1],
-        function(err, data){
-            if(err){
-                console.log(err);
-                outputError(e, 404);
-            } else {
-                e.response.writeHeader(200, {
-                    'Content-Type': contentType(result[1]),
-                });
-                e.response.end(data);
-            };
-            rueckruf(null);
-        }
-    );
 };

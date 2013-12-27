@@ -2,7 +2,7 @@ function wrapTemplate(template){
     function emergencyButton(width){
         if(undefined == width) width = 200;
         var height = 108 * width / 200;
-        return '<a href="/stop"><img src="/static/stop.png" alt="紧急锁定按钮" width="' + width + '" height="' + height + '"></a>';
+        return '<a href="/stop"><img src="/static?name=stop.png" alt="紧急锁定按钮" width="' + width + '" height="' + height + '"></a>';
     };
     
     function navigateBar(){
@@ -91,7 +91,7 @@ function wrapTemplate(template){
                             // browser like Dillo.
               + '<tr valign="top">'
                 + '<td width="5%">'
-                  + '<img src="/static/logo.png" width="' + sidebarWidth + '" height="' + 106 * sidebarWidth / 160 + '">' 
+                  + '<img src="/static?name=logo.png" width="' + sidebarWidth + '" height="' + 106 * sidebarWidth / 160 + '">' 
                   + '<table class="fineLine" cellspacing="0" cellpadding="0">' + menu + '</table>'
                   + emergencyButton(sidebarWidth) 
                   + '</td>'

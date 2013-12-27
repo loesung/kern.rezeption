@@ -6,7 +6,8 @@ module.exports = function(){
         .sub('compose', require('./compose/__init__.js'))
         .sub('monitor', require('./monitor/__init__.js'))
 
-        .handle('', require('./index.js'))
+        .handle('', require('./index.js')())
+        .handle('static', require('./static.js')())
     ;
     return router;
 };
