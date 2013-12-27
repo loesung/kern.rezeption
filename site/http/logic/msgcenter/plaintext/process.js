@@ -89,7 +89,7 @@ function passphrase(queues, ids, phase, post, respond){
             + ids.length
             + '</font> 条密文。请确定用来保护信息的密码。'
 
-            + '<form method="POST" action="/' + (new Date().getTime()) + '/msgcenter/plaintext/-/do">'
+            + '<form method="POST" action="/msgcenter/plaintext/process">'
             + akashicForm(ids, phase, 'passphrase')
             + '<table cellspacing="1" cellpadding="0">'
             + '<tr><td colspan="2">'
@@ -112,7 +112,7 @@ function passphrase(queues, ids, phase, post, respond){
         respond(null, output);
     } else {
         if('encrypt' != post.parsed.submit){
-            respond(302, '/msgcenter/plaintext');
+            respond(302, '/msgcenter/plaintext/');
             return;
         };
         var workflow = [], password;
@@ -212,7 +212,7 @@ function remove(queues, ids, phase, post, respond){
         if('y' == post.parsed['confirm']){
             worker();
         } else {
-            respond(302, '/msgcenter/plaintext');
+            respond(302, '/msgcenter/plaintext/');
         };
     };
 };
@@ -225,7 +225,7 @@ function remove(queues, ids, phase, post, respond){
 module.exports = function(queues){
     return function(data, callback){
         function backToIndex(){
-            respond(302, '/msgcenter/plaintext');
+            callback(302, '/msgcenter/plaintext/');
         };
         var isID = /^[0-9a-f]{8}\-([0-9a-f]{4}\-){3}[0-9a-f]{12}$/i;
         var isPost = $.types.isObject(post);
@@ -236,34 +236,35 @@ module.exports = function(queues){
          * Anyway, use isID.test() to filter all id.
          */
         var objectIDs = [];
-        if(isID.test(parameter)) objectIDs.push(parameter.toLowerCase());
-        if(isPost){
-            for(var key in post.parsed){
-                if(isID.test(post.parsed[key]))
-                    objectIDs.push(post.parsed[key].toLowerCase());
-            };
+        for(var key in data.get){
+            if(isID.test(data.get[key]))
+                objectIDs.push(data.get[key].toLowerCase());
+        };
+        for(var key in data.post){
+            if(isID.test(data.post[key]))
+                objectIDs.push(data.post[key].toLowerCase());
         };
         if(objectIDs.length < 1) return backToIndex();
 
         /* Determine action: send(codebook, ...), or remove */
-        var action = urlcommand;
-        if(isPost) action = post.parsed['do'];
+        var action = data.get['do'];
+        if(isPost) action = data.post['do'];
         if(!/^(remove|passphrase|codebook|sign)$/i.test(action))
             return backToIndex();
 
         /* Determine phase of process */
         var phase = 0;
         if(isPost){
-            if(!isNaN(post.parsed['phase']))
-                phase = Math.round(post.parsed['phase']);
+            if(!isNaN(data.post['phase']))
+                phase = Math.round(data.post['phase']);
         };
 
         switch(action){
             case 'remove':
-                remove(queues, objectIDs, phase, post, respond);
+                remove(queues, objectIDs, phase, post, callback);
                 break;
             case 'passphrase':
-                passphrase(queues, objectIDs, phase, post, respond); 
+                passphrase(queues, objectIDs, phase, post, callback); 
                 break;
             default:
                 backToIndex();

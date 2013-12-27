@@ -1,14 +1,14 @@
 module.exports = function(queues){
     return function(data, callback){
-        $.global.set('compose', post.parsed.content);
+        $.global.set('compose', data.post.content);
 
         var workflow = [];
 
         workflow.push(function(callback){
             String('Command on pushing a new message to queue.').DEBUG();
             queues.send.pending.push(
-                post.parsed.content,
-                post.parsed.comment,
+                data.post.content,
+                data.post.comment,
                 callback
             );
         });
@@ -32,16 +32,19 @@ module.exports = function(queues){
         });
 
         workflow.push(function(queueID, callback){
-            if(!/^(passphrase|codebook|sign)$/i.test(post.parsed.send)){
-                callback(302, '/msgcenter/plaintext');
+            if(!/^(passphrase|codebook|sign)$/i.test(data.post.send)){
+                callback(302, '/msgcenter/plaintext/');
             } else {
                 callback(
                     302,
-                    '/msgcenter/plaintext/' + queueID + '/' + post.parsed.send
+                    '/msgcenter/plaintext/?item0=' + queueID + '&do=' + data.post.send
                 );
             };
         });
 
-        $.nodejs.async.waterfall(workflow, respond);
+        $.nodejs.async.waterfall(workflow, function(err, result){
+            callback(err, result);
+            console.log(err, result);
+        });
     };
 };

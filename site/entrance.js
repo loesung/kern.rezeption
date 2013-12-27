@@ -6,7 +6,15 @@ module.exports = function(e){
             require('./router.js')(e),
         ],
         function(err, result){
-            if(null != err) return outputError(e, 404);
+            if(null != err)
+                if(302 == err){
+                    e.response.writeHead(302, {
+                        'Location': result
+                    });
+                    e.response.end();
+                    return;
+                } else
+                    return outputError(e, 404);
 
             e.response.writeHead(200, {
                 'Content-Type': 'text/html',
