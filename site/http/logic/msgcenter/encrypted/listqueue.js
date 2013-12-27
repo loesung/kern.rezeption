@@ -1,4 +1,4 @@
-var PER_PAGE = 8;
+var PER_PAGE = 2;
 module.exports = function(queues){
     return function(data, rueckruf){
         var workflow = [];
@@ -11,7 +11,7 @@ module.exports = function(queues){
                 return b.timestamp - a.timestamp;
             });
 
-            pager = _.paging(list, PER_PAGE, 'encrypted');
+            pager = _.paging(list, PER_PAGE, data.get.page);
 
             callback(null, pager);
         });

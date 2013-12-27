@@ -41,34 +41,37 @@ module.exports = function(pageName){
                     if(cur)
                         return ('[<font color="#FF0000">' + i + '</font>]');
                     else
-                        return ('[<a href="/' + (new Date().getTime())
-                            + '/msgcenter/' + pageName + '/' + i + '">' + i + '</a>]')
+                        return ('[<a href="/msgcenter/' + pageName + '/?page=' + i + '&_=' + process.hrtime()[1] + '">' + i + '</a>]')
                         ;
                     }
                 )
-                + '<br /><table><tr><td>选中项目：</td>'
-                + '<td><select name="do">'
-                +   '<option value="send">选择信道并发送</option>'
-                +   '<option value="remove">删除</option>'
-                + '</select></td>'
-                + '<td><button type="submit">操作</button></td>'
-                + '</tr></table>'
-                + '</form>'
             ;
 
+            if('encrypted' == pageName)
+                output += ''
+                    + '<br /><table><tr><td>选中项目：</td>'
+                    + '<td><select name="do">'
+                    +   '<option value="send">选择信道并发送</option>'
+                    +   '<option value="remove">删除</option>'
+                    + '</select></td>'
+                    + '<td><button type="submit">操作</button></td>'
+                    + '</tr></table>'
+                    + '</form>'
+                ;
 
-            output += ''
-                + '<table><tr><td><a href="/' + (new Date().getTime()) + '/compose">撰写新消息</a>，或对选中项目：</td>'
-                + '<td><select name="do"' + (noItem?' disabled="disabled"':'') + '>'
-                +   '<option value="passphrase" selected>加密，使用临时输入的口令</option>'
-                +   '<option value="codebook">加密，指定一个或多个收件人，使用密码本</option>'
-                +   '<option value="sign">使用公钥签署，但不加密</option>'
-                +   '<option value="remove">删除</option>'
-                + '</select></td>'
-                + '<td><button type="submit"' + (noItem?' disabled="disabled"':'') + '>操作</button></td>'
-                + '</tr></table>'
-                + '</form>'
-            ;
+            if('plaintext' == pageName)
+                output += ''
+                    + '<table><tr><td><a href="/' + (new Date().getTime()) + '/compose">撰写新消息</a>，或对选中项目：</td>'
+                    + '<td><select name="do"' + (noItem?' disabled="disabled"':'') + '>'
+                    +   '<option value="passphrase" selected>加密，使用临时输入的口令</option>'
+                    +   '<option value="codebook">加密，指定一个或多个收件人，使用密码本</option>'
+                    +   '<option value="sign">使用公钥签署，但不加密</option>'
+                    +   '<option value="remove">删除</option>'
+                    + '</select></td>'
+                    + '<td><button type="submit"' + (noItem?' disabled="disabled"':'') + '>操作</button></td>'
+                    + '</tr></table>'
+                    + '</form>'
+                ;
         };
 
         return output;

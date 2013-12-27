@@ -11,7 +11,7 @@ module.exports = function(queues){
                 return b.timestamp - a.timestamp;
             });
 
-            pager = _.paging(list, PER_PAGE, 'plaintext');
+            pager = _.paging(list, PER_PAGE, data.get.page);
 
             callback(null, pager);
         });
@@ -34,48 +34,6 @@ module.exports = function(queues){
                 output = Error('错误：无法连接到数据中心。');
                 return rueckruf(err, output);
             };
-/*
-            output = '<form method="POST" action="/' + (new Date().getTime()) + '/msgcenter/plaintext/-/do">'
-                +'<table class="report" cellspacing="0" cellpadding="0" style="font-size: 9pt">'
-                + '<tr class="head">'
-                +   '<td width="20%">时间</td>'
-                +   '<td>内容</td>'
-                +   '<td width="5%">选择</td>'
-                + '</tr>'
-            ;
-
-            var disableFunctions = (result.length < 1);
-            if(disableFunctions){
-                output += '<tr><td colspan="3">'
-                    + '当前没有项目</td></tr>'
-                    + '</table></form>';
-            } else {
-                for(var i in result){
-                    var item = result[i];
-                    output 
-                        += '<tr>'
-                        +       '<td>' + _.format.time2Full(
-                                            new Date(item.timestamp * 1000)
-                            ) + '</td>'
-                        +       '<td>' + item.data + '<span class="hint">(' + item.comment + ')</span></td>'
-                        +       '<td><input type="checkbox" name="item' + i + '" value="' + item.id + '"/></td>'
-                        + '</tr>'
-                    ;
-                };
-                output += '</table>'
-                    + '第' + pager.current + '页/共' + pager.max + '页 '
-                    + pager.navigateBar(function(i, cur){
-                        if(cur)
-                            return ('[<font color="#FF0000">' + i + '</font>]');
-                        else
-                            return ('[<a href="/' + (new Date().getTime())
-                                + '/msgcenter/plaintext/' + i + '">' + i + '</a>]')
-                            ;
-                        }
-                    )
-                ;
-            };*/
-
 
             rueckruf(null, {
                 pager: pager,

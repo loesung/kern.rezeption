@@ -12,7 +12,7 @@ module.exports = function(queues){
                 return b.timestamp - a.timestamp;
             });
 
-            pager = _.paging(list, PER_PAGE, 'ciphertext');
+            pager = _.paging(list, PER_PAGE, data.get.page);
 
             callback(null, pager);
         });

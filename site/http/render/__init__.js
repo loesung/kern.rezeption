@@ -10,8 +10,7 @@ function wrapTemplate(template){
     };
     
     function navigateLink(name, target, realPathname){
-        var ret = '<form method="GET" action="' + target + '"><tr><td colspan="2">';
-        ret += '<input type="hidden" name="_" value="' + process.hrtime()[1] + '"/>';
+        var ret = '<form method="post" action="' + target + '?_=' + process.hrtime()[1] + '"><tr><td colspan="2">';
         if(realPathname.substr(1, target.length-1) == target.substr(1))
             ret += ('<button class="navbutton btn-active" type="submit">' + name + '</button>');
         else
@@ -23,11 +22,9 @@ function wrapTemplate(template){
     function navigateWriteSection(realPathname){
         var class1 = ((realPathname.substr(1, 9) == 'msgcenter')?'btn-active':'btn-normal'),
             class2 = ((realPathname.substr(1, 7) == 'compose')?'btn-active':'btn-special');
-        return '<tr><form action="/msgcenter/">'
-            + '<input type="hidden" name="_" value="' + process.hrtime()[1] + '"/>'
+        return '<tr><form method="post" action="/msgcenter/?_=' + process.hrtime()[1] + '">'
             + '<td><button class="navbutton ' + class1 + '" type="submit">消息队列</button></td></form>'
-            + '<form action="/compose"><td>'
-            + '<input type="hidden" name="_" value="' + process.hrtime()[1] + '"/>'
+            + '<form action="/compose?_' + process.hrtime()[1] + '"><td>'
             + '<button class="navbutton ' + class2 + '" type="submit">撰写</button></td></form></tr>'
         ;
     };
