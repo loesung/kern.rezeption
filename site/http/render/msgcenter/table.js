@@ -13,7 +13,8 @@ module.exports = function(pageName){
             items = data.items;
 
 
-        if(items.length < 1){
+        var noItem = (items.length < 1);
+        if(noItem){
             output += '<tr><td colspan="3">'
                 + '当前没有项目</td></tr>'
                 + '</table></form>';
@@ -25,10 +26,14 @@ module.exports = function(pageName){
                     +       '<td>' + _.format.time2Full(
                                         new Date(item.timestamp * 1000)
                         ) + '</td>'
-                    +       '<td class="hint">' + item.comment + '</td>'
-                    +       '<td><input type="checkbox" name="item' + i + '" value="' + item.id + '"/></td>'
-                    + '</tr>'
                 ;
+
+                if('plaintext' == pageName || 'decrypted' == pageName)
+                    output += '<td>' + item.data + '<span class="hint">(' + item.comment + ')</span></td>';
+                else
+                    output += '<td class="hint">' + item.comment + '</td>';
+
+                output += '<td><input type="checkbox" name="item' + i + '" value="' + item.id + '"/></td></tr>';
             };
             output += '</table>'
                 + '第' + pager.current + '页/共' + pager.max + '页 '
@@ -47,6 +52,20 @@ module.exports = function(pageName){
                 +   '<option value="remove">删除</option>'
                 + '</select></td>'
                 + '<td><button type="submit">操作</button></td>'
+                + '</tr></table>'
+                + '</form>'
+            ;
+
+
+            output += ''
+                + '<table><tr><td><a href="/' + (new Date().getTime()) + '/compose">撰写新消息</a>，或对选中项目：</td>'
+                + '<td><select name="do"' + (noItem?' disabled="disabled"':'') + '>'
+                +   '<option value="passphrase" selected>加密，使用临时输入的口令</option>'
+                +   '<option value="codebook">加密，指定一个或多个收件人，使用密码本</option>'
+                +   '<option value="sign">使用公钥签署，但不加密</option>'
+                +   '<option value="remove">删除</option>'
+                + '</select></td>'
+                + '<td><button type="submit"' + (noItem?' disabled="disabled"':'') + '>操作</button></td>'
                 + '</tr></table>'
                 + '</form>'
             ;

@@ -1,7 +1,7 @@
 module.exports = function(tableDrawer){
     return function(data){
         var drawer = tableDrawer(
-            'ciphertext'
+            'plaintext'
         );
 
         return drawer(data);
