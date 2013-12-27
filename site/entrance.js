@@ -128,6 +128,7 @@ module.exports = function(e){
         function(err, result){
             if(null != err)    
                 outputError(e, 404);
+            outputPage(e, result);
         }
     );
 };

@@ -59,8 +59,8 @@ function selfReportSync(){
     return ret;
 };
 
-module.exports = function(e, matchResult, rueckruf){
-    outputPage(e, {
+module.exports = function(data, callback){//e, matchResult, rueckruf){
+    callback(null, {
         title: '主页',
         content
             : '欢迎使用。请使用左侧菜单选择功能。下面显示本系统的基本信息。'
@@ -78,6 +78,4 @@ module.exports = function(e, matchResult, rueckruf){
             + '</style>'
         ,
     });
-
-    rueckruf(null);
 };
