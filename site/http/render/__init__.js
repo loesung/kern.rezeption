@@ -23,7 +23,7 @@ function wrapTemplate(template){
     function navigateWriteSection(realPathname){
         var class1 = ((realPathname.substr(1, 9) == 'msgcenter')?'btn-active':'btn-normal'),
             class2 = ((realPathname.substr(1, 7) == 'compose')?'btn-active':'btn-special');
-        return '<tr><form action="/msgcenter">'
+        return '<tr><form action="/msgcenter/">'
             + '<input type="hidden" name="_" value="' + process.hrtime()[1] + '"/>'
             + '<td><button class="navbutton ' + class1 + '" type="submit">消息队列</button></td></form>'
             + '<form action="/compose"><td>'

@@ -3,7 +3,7 @@ module.exports = router;
 
 function wrapTemplate(template){
     function navLink(text, target){
-        if(true || subcommand == target)
+        if(false)// && subcommand == target)
             return '[<font color="#FF0000">' + text + '</font>]';
         else
             return '[<a href="/' + (new Date().getTime())
@@ -44,5 +44,7 @@ function wrapTemplate(template){
 };
 
 router
-    .handle('', wrapTemplate(require('./_.js')))
+    .handle('', require('./_.js'))
 ;
+
+router.proxy = wrapTemplate;
