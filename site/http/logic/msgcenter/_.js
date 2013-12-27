@@ -1,4 +1,4 @@
-module.exports = function(queues){
+module.exports = function(){
     return function(data, callback){
         callback(null, {});
     };

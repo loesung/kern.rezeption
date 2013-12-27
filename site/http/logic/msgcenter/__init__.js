@@ -1,9 +1,7 @@
 var router = $.net.urlRouter();
 
-var queues = _.queue(IPC['datenbank']);
-
 router
-    .handle('', require('./_.js')(queues))
+    .handle('', require('./_.js')())
     
     .sub('ciphertext', require('./ciphertext/__init__.js'))
     .sub('plaintext', require('./plaintext/__init__.js'))

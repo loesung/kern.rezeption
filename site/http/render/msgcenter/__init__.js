@@ -6,8 +6,9 @@ function wrapTemplate(template){
         if(false)// && subcommand == target)
             return '[<font color="#FF0000">' + text + '</font>]';
         else
-            return '[<a href="/' + (new Date().getTime())
-                + '/msgcenter/' + target + '">' + text + '</a>]'
+            return '[<a href="/msgcenter/' + target + '?_='
+                + process.hrtime()[1]
+                + '">' + text + '</a>]'
             ;
     };
     return function(data){
