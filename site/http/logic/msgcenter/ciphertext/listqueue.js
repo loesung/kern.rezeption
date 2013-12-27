@@ -23,7 +23,7 @@ module.exports = function(queues){
                 result.push((function(){
                     var itemID = pager.list[i].id;
                     return function(callback){
-                        queues.send.pending.query(itemID, callback);
+                        queues.receive.pending.query(itemID, callback);
                     };
                 })());
             };
