@@ -49,7 +49,7 @@ function wrapTemplate(template){
             + navigateLink('首页', '/', realPathname)
             + navigateBar()
             + navigateWriteSection(realPathname)
-            + navigateLink('管理联系人和密钥', '/contact', realPathname)
+            + navigateLink('管理联系人和密钥', '/contact/', realPathname)
             + navigateBar()
             + navigateLink('系统日志', '/log', realPathname)
             + navigateLink('系统状态监视器', '/monitor', realPathname)

@@ -38,16 +38,14 @@ function configWrapper(subtitle){
     };
 };
 
-module.exports = function(){
-    var router = $.net.urlRouter();
-    var identity = _.identity(IPC['geheimdienst']);
+var router = $.net.urlRouter();
+var identity = _.identity(IPC['geheimdienst']);
 
-    router
-        .handle('', require('./get.js')(identity, configWrapper('联系人')))
-        .handle('add', require('./add.js')(identity, configWrapper('添加联系人')))
-        .handle('detail', require('./detail.js')(identity, configWrapper('详细信息')))
-        .handle('remove', require('./remove.js')(identity, configWrapper('删除联系人')))
-    ;
+router
+    .handle('', require('./get.js')(identity, configWrapper('联系人')))
+    .handle('add', require('./add.js')(identity, configWrapper('添加联系人')))
+    .handle('detail', require('./detail.js')(identity, configWrapper('详细信息')))
+    .handle('remove', require('./remove.js')(identity, configWrapper('删除联系人')))
+;
 
-    return router; 
-};
+module.exports = router;
