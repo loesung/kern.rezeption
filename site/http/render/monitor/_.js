@@ -1,34 +1,7 @@
-function queryState(rueckruf){
-    var task = {};
-    for(var item in IPC){
-        task[item] = (function(ipcname){
-            return function(callback){
-                String('Querying for state of [' + ipcname + '].').DEBUG();
-                IPC[ipcname].request(
-                    '/',
-                    function(err, packet){
-                        callback(null, (null == err));
-                    }
-                );
-            };
-        })(item);
-    };
-
-    $.nodejs.async.parallel(
-        task,
-        function(err, result){
-            if(null == err)
-                rueckruf(result);
-            else
-                rueckruf(false);
-        }
-    );
-};
-
-module.exports = function(e, matchResult, rueckruf){
-    function callback(states){
+module.exports = function(){
+    return function(data){
         var content = '';
-        if(false == states){
+        if(false == data){
             content = '在查询中出现错误。';
         } else {
             var list = [
@@ -49,7 +22,7 @@ module.exports = function(e, matchResult, rueckruf){
             
             for(var each in list){
                 var className = '', operation = '';
-                switch(states[list[each][0]]){
+                switch(data[list[each][0]]){
                     case true:
                         className = 'good';
                         operation = '<button class="navbutton btn-normal" type="submit" name="action" value="stop">停止</button>';
@@ -74,30 +47,6 @@ module.exports = function(e, matchResult, rueckruf){
             content += '</table>';
         };
 
-        outputPage(e, {
-            title: '系统状态监视器',
-            content
-                : '这里显示的是本系统各个部件的状态。'
-                + '本监视器通过发起IPC（进程间通信）请求，检查本界面系统和各部件的通信是否畅通。'
-                + content
-                + '<br />'
-            ,
-            head
-                : '<style type="text/css">'
-                  + '.report{border: #CCCCCC 1px solid; width: 100%; font-size: 9pt}'
-                  + '.report td{border: #CCCCCC 0.5px solid;}'
-                  + '.report .head{background: #CCCCCC;}'
-                  + '.report .switch{font-weight: bold; text-align: center}'
-                  + '.report .good{background: #00C000; color: #FFFFFF}'
-                  + '.report .error{background: #BB0000; color: #FFFF00}'
-                  + '.report .unknow{background: #FFDD00; color: #FF0000}'
-                  + '.report button{text-align: center;}'
-                + '</style>'
-            ,
-        });
-
-        rueckruf(null);
+        return content;
     };
-
-    queryState(callback);
 };
