@@ -10,7 +10,8 @@ function wrapTemplate(template){
     };
     
     function navigateLink(name, target, realPathname){
-        var ret = '<form action="/' + (new Date().getTime()) + target + '"><tr><td colspan="2">';
+        var ret = '<form method="GET" action="' + target + '"><tr><td colspan="2">';
+        ret += '<input type="hidden" name="_" value="' + process.hrtime()[1] + '"/>';
         if(realPathname.substr(1, target.length-1) == target.substr(1))
             ret += ('<button class="navbutton btn-active" type="submit">' + name + '</button>');
         else
@@ -22,9 +23,11 @@ function wrapTemplate(template){
     function navigateWriteSection(realPathname){
         var class1 = ((realPathname.substr(1, 9) == 'msgcenter')?'btn-active':'btn-normal'),
             class2 = ((realPathname.substr(1, 7) == 'compose')?'btn-active':'btn-special');
-        return '<tr><form action="/' + (new Date().getTime()) + '/msgcenter">'
+        return '<tr><form action="/msgcenter">'
+            + '<input type="hidden" name="_" value="' + process.hrtime()[1] + '"/>'
             + '<td><button class="navbutton ' + class1 + '" type="submit">消息队列</button></td></form>'
-            + '<form action="/' + (new Date().getTime()) + '/compose"><td>'
+            + '<form action="/compose"><td>'
+            + '<input type="hidden" name="_" value="' + process.hrtime()[1] + '"/>'
             + '<button class="navbutton ' + class2 + '" type="submit">撰写</button></td></form></tr>'
         ;
     };
@@ -43,7 +46,7 @@ function wrapTemplate(template){
 
         var menu
             = navigateBar()
-            + navigateLink('首页', '/home', realPathname)
+            + navigateLink('首页', '/', realPathname)
             + navigateBar()
             + navigateWriteSection(realPathname)
             + navigateLink('管理联系人和密钥', '/contact', realPathname)
@@ -64,7 +67,7 @@ function wrapTemplate(template){
             = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
             + '<html><head><meta http-equiv="Content-Type" content="application/html; charset=utf-8" />'
             + '<title>' + CONFIG.get('site-name') + ' | ' + data['title'] + '</title>'
-            + ((undefined == data['head'])?'':data['head'])
+            + ((undefined == childData['head'])?'':childData['head'])
             + '<style type="text/css">'
                 + 'body{background: #FFFFFF;}'
                 + 'a img{border: 0px}'
@@ -108,7 +111,7 @@ function wrapTemplate(template){
                     + '</tr>'
                     +'</table>'
                   )
-                  + section(('当前位置：' + data['title']), data['content'])
+                  + section(('当前位置：' + childData['title']), childData['content'])
                 + '</td>'
               + '</tr>'
             + '</table>'
