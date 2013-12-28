@@ -8,6 +8,7 @@ module.exports = function(){
 
         .handle('', require('./index.js')())
         .handle('static', require('./static.js')())
+        .handle('authenticate', require('./authenticate.js')())
     ;
     return router;
 };

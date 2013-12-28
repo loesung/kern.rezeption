@@ -1,4 +1,5 @@
-function tablize(json, showPage){
+function getList(json, showPage){
+    // TODO use _.pager to do this.
     var list = [];
 
     for(var i in json)
@@ -19,62 +20,30 @@ function tablize(json, showPage){
         if(showPage > maxPage) showPage = maxPage;
     }
 
-    var ret = '<table class="report" cellspacing="0px" cellpadding="1px">'
-        + '<tr class="head">' 
-            + '<td width="25%">短识别ID</td>'
-            + '<td>名称</td>'
-            + '<td width="12%">操作</td>'
-        + '</tr>'
-    ;
-
-    function shortID(i){
-        var s = i.toUpperCase().substr(0,16);
-        return [s.substr(0,4), s.substr(4,4), s.substr(8,4), s.substr(12,4)]
-            .join(' ')
-        ;
-    };
-
-    if(list.length > 0){
-        for(var i in list){
-            ret += ''
-                + '<form method="POST" action="/' + (new Date().getTime()) + '/contact/detail">'
-                + '<input style="display: none" type="hidden" name="id" value="' + list[i].id + '"/>'
-                + '<tr>'
-                + '<td>' + shortID(list[i].id) + '</td>'
-                + '<td>' + list[i].name + '</td>'
-                + '<td>'
-                +   '<button type="submit">查看详情</button>'
-                + '</td>'
-                + '</tr>'
-                + '</form>' 
-            ;
-        };
-    } else {
-        ret += ''
-            + '<tr><td colspan="3">当前无联系人</td></tr>'
-        ;
-    };
-    ret += ''
-        + '</table>'
-
-        + '<form method="POST" action="/' + (new Date().getTime()) + '/contact/add">'
-        + '<table><tr><td>新增联系人：请输入名称</td><td>'
-        + '<input name="name" type="text" size="50" /></td>'
-        + '<td><button type="submit">增加</button></td></tr></table>'
-        + '</form>'
-    ;
-    return ret;
+    return list;
 };
 
-module.exports = function(identity, callbackWrapper){
+module.exports = function(identity){
     return function(data, callback){
+        var page = data.get.page;
+
         $.nodejs.async.waterfall([
             identity.list,
 
             function(json, callback){
-                callback(null, tablize(json));
+                callback(null, getList(json, page));
             },
 
-        ], callback);
+        ], function(err, result){   
+            if(null == err) return callback(null, result);
+            if(401 == err)
+                return callback(
+                    302,
+                    '/authenticate?' + $.nodejs.querystring.stringify({
+                        'redirect': '/contact/?_=' + process.hrtime()[1],
+                    })
+                );
+            callback(null, Error('cannot-connect-to-geheimdienst'));
+        });
     };
 };

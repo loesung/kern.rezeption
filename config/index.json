@@ -5,5 +5,7 @@
 
     {"name":"ipc-map", "type":"json"},
 
-    {"name":"socket-path", "default":"/tmp/loesung-rezeption"}
+    {"name":"socket-path", "default":"/tmp/loesung-rezeption"},
+
+    {"name":"password-cache-time", "default":120}
 ]
