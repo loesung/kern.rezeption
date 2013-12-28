@@ -2,7 +2,7 @@ function wrapTemplate(template){
     function emergencyButton(width){
         if(undefined == width) width = 200;
         var height = 108 * width / 200;
-        return '<a href="/stop"><img src="/static?name=stop.png" alt="紧急锁定按钮" width="' + width + '" height="' + height + '"></a>';
+        return '<a href="/stop?_=' + process.hrtime()[1] + '"><img src="/static?name=stop.png" alt="紧急锁定按钮" width="' + width + '" height="' + height + '"></a>';
     };
     
     function navigateBar(){
