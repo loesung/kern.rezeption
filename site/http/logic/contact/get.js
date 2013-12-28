@@ -39,7 +39,7 @@ module.exports = function(identity){
             if(401 == err)
                 return callback(
                     302,
-                    '/authenticate?' + $.nodejs.querystring.stringify({
+                    '/authenticate/?' + $.nodejs.querystring.stringify({
                         'redirect': '/contact/?_=' + process.hrtime()[1],
                     })
                 );

@@ -122,12 +122,12 @@ function wrapTemplate(template){
 var router = $.net.urlRouter();
 router
     .handle('', require('./index.js'))
-    .handle('authenticate', require('./authenticate.js'))
 
     .sub('msgcenter', require('./msgcenter/__init__.js'))
     .sub('compose', require('./compose/__init__.js'))
     .sub('monitor', require('./monitor/__init__.js'))
     .sub('contact', require('./contact/__init__.js'))
+    .sub('authenticate', require('./authenticate/__init__.js'))
 ;
 router.proxy = wrapTemplate;
 
