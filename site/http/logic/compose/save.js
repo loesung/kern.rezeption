@@ -9,7 +9,13 @@ module.exports = function(queues){
             queues.send.pending.push(
                 data.post.content,
                 data.post.comment,
-                callback
+                function(err, json){
+                    if(null != err) 
+                        return callback(
+                            true, Error('错误：没能将消息插入发送队列。')
+                        );
+                    callback(null, json);
+                }
             );
         });
 
@@ -19,7 +25,7 @@ module.exports = function(queues){
                 String('Unable to insert new message into send.pending queue.')
                     .ERROR()
                 ;
-                callback(true, '错误：没能将消息插入发送队列。');
+                callback(true, Error('错误：没能将消息插入发送队列。'));
                 return;
             };
 
@@ -37,7 +43,10 @@ module.exports = function(queues){
             } else {
                 callback(
                     302,
-                    '/msgcenter/plaintext/?item0=' + queueID + '&do=' + data.post.send
+                    '/msgcenter/plaintext/?item0='
+                    + queueID
+                    + '&do='
+                    + data.post.send
                 );
             };
         });

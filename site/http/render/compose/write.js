@@ -6,7 +6,7 @@ module.exports = function(){
             data = '';
 
         return (''
-            + '<form action="/compose/save" method="POST">'
+            + '<form action="/compose/save?_=' + process.hrtime()[1] + '" method="POST">'
             + '请在下面的文本框中编辑您的消息。您可以使用Ctrl+C和Ctrl+V复制粘贴。<br />'
             + '在任何时候，提交的数据都会被保存到发送队列。但是只有您确定了加密方式，才能发送。<br />'
             + '<strong>如果保存到发送队列失败，在您返回这个页面时仍会显示上一次编辑的消息。</strong>'

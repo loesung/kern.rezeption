@@ -37,7 +37,13 @@ function wrapTemplate(template){
     };
 
     return function(data){ // wrapped template
-        var childData = template(data);
+        if($.types.isError(data))
+            var childData = {
+                title: '错误',
+                content: data.message,
+            };
+        else
+            var childData = template(data);
 
         var realPathname = '';///^(\/[0-9]+)?(.+)$/.exec(e.url.pathname)[2];
 
