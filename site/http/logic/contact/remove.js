@@ -12,7 +12,12 @@ module.exports = function(identity){
         identity.remove(id, function(err){
             // TODO redirect to detail page.
             if(401 == err)
-                return callback(401, ('/contact/?_=' + process.hrtime()[1]));
+                return callback(401, '/contact/detail?'
+                    + $.nodejs.querystring.stringify({
+                        id: id,
+                        _: process.hrtime()[1],
+                    })
+                );
 
             if(null != err)
                 return callback(
