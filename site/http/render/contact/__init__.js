@@ -3,9 +3,9 @@ module.exports = router;
 
 router
     .handle('', require('./get.js'))
-    .handle('add', require('./add.js'))
-/*    .handle('detail', require('./detail.js')())
-    .handle('remove', require('./remove.js')())*/
+    .handle('add', require('./showinfo.js'))
+    .handle('detail', require('./detail.js'))
+    .handle('remove', require('./showinfo.js'))
 ;
 
 router.proxy = function(template){

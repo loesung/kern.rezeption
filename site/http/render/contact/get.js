@@ -17,8 +17,12 @@ module.exports = function(data){
     if(data.length > 0){
         for(var i in data){
             ret += ''
-                + '<form method="POST" action="/contact/detail">'
-                + '<input style="display: none" type="hidden" name="id" value="' + data[i].id + '"/>'
+                + '<form method="POST" action="/contact/detail?'
+                    + $.nodejs.querystring.stringify({
+                        id: data[i].id,
+                        _: process.hrtime()[1],
+                    })
+                + '">'
                 + '<tr>'
                 + '<td>' + shortID(data[i].id) + '</td>'
                 + '<td>' + data[i].name + '</td>'
