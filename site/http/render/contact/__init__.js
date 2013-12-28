@@ -3,8 +3,8 @@ module.exports = router;
 
 router
     .handle('', require('./get.js'))
-/*    .handle('add', require('./add.js')())
-    .handle('detail', require('./detail.js')())
+    .handle('add', require('./add.js'))
+/*    .handle('detail', require('./detail.js')())
     .handle('remove', require('./remove.js')())*/
 ;
 
@@ -12,16 +12,9 @@ router.proxy = function(template){
     return function(data){
         var content, title;
 
-        console.log('data', data);
-
-        if($.types.isError(data)){
-            title = '错误信息';
-            content = '错误：' + data.message;
-        }else{
-            var childData = template(data);
-            content = childData.content;
-            title = childData.title;
-        };
+        var childData = template(data);
+        content = childData.content;
+        title = childData.title;
 
         return {
             title: '联系人' + (title?' > ' + title:''),

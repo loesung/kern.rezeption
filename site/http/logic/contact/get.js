@@ -37,12 +37,7 @@ module.exports = function(identity){
         ], function(err, result){   
             if(null == err) return callback(null, result);
             if(401 == err)
-                return callback(
-                    302,
-                    '/authenticate/?' + $.nodejs.querystring.stringify({
-                        'redirect': '/contact/?_=' + process.hrtime()[1],
-                    })
-                );
+                return callback(401, ('/contact/?_=' + process.hrtime()[1]));
             callback(null, Error('cannot-connect-to-geheimdienst'));
         });
     };

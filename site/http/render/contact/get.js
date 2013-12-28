@@ -38,7 +38,7 @@ module.exports = function(data){
     ret += ''
         + '</table>'
 
-        + '<form method="POST" action="/contact/add">'
+        + '<form method="POST" action="/contact/add?_=' + process.hrtime()[1] + '">'
         + '<table><tr><td>新增联系人：请输入名称</td><td>'
         + '<input name="name" type="text" size="50" /></td>'
         + '<td><button type="submit">增加</button></td></tr></table>'
