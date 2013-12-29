@@ -43,7 +43,7 @@ module.exports = function(queues){
             } else {
                 callback(
                     302,
-                    '/msgcenter/plaintext/?item0='
+                    '/msgcenter/plaintext/process?item0='
                     + queueID
                     + '&do='
                     + data.post.send
