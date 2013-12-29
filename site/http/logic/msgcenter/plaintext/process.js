@@ -1,3 +1,5 @@
+var toolkit = require('../toolkit.js')('plaintext');
+
 /*
  * Process plaintext messages
  *
@@ -140,41 +142,7 @@ function passphrase(queues, ids, phase, data, respond){
 /*
  * Remove selected messages
  */
-function remove(queues, ids, phase, data, respond){
-    var output = '';
-
-    function worker(){
-        var task = [];
-        for(var i in ids){
-            task.push((function(){
-                var itemID = ids[i];
-                return function(callback){
-                    queues.send.pending.remove(itemID, function(){
-                        callback(null);
-                    });
-                };
-            })());
-        };
-        $.nodejs.async.parallel(task, function(err){
-            respond(302, '/msgcenter/plaintext/?_=' + process.hrtime()[1]);
-        });
-    };
-
-    if(0 == phase){
-        respond(null, {
-            type: 'remove',
-            ids: ids,
-            phase: phase,
-        });
-    } else {
-        if('y' == data.post['confirm']){
-            worker();
-        } else {
-            respond(302, '/msgcenter/plaintext/?_=' + process.hrtime()[1]);
-        };
-    };
-};
-
+var remove = toolkit.remove;
 
 
 /*
@@ -216,7 +184,7 @@ module.exports = function(queues){
 
         switch(action){
             case 'remove':
-                remove(queues, objectIDs, phase, data, callback);
+                toolkit.remove(queues, objectIDs, phase, data, callback);
                 break;
             case 'passphrase':
                 passphrase(queues, objectIDs, phase, data, callback); 

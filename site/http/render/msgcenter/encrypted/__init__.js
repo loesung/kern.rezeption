@@ -1,9 +1,10 @@
 var router = $.net.urlRouter();
 module.exports = router;
 
-var tableDrawer = require('../table.js');
+var toolkit = require('../toolkit.js')();
 
 router
-    .handle('', require('./_.js')(tableDrawer))
+    .handle('', require('./_.js')(toolkit))
+    .handle('process', require('./process.js')(toolkit))
 ;
 

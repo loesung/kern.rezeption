@@ -1,3 +1,5 @@
+var toolkit = require('../toolkit.js')('encrypted');
+
 /*
  * Process encrypted messages
  *
@@ -214,44 +216,7 @@ function send(queues, ids, phase, post, respond){
 /*
  * Remove selected messages
  */
-function remove(queues, ids, phase, post, respond){
-    var output = '';
-
-    function worker(){
-        var task = [];
-        for(var i in ids){
-            task.push((function(){
-                var itemID = ids[i];
-                return function(callback){
-                    queues.send.proceeded.remove(itemID, function(){
-                        callback(null);
-                    });
-                };
-            })());
-        };
-        $.nodejs.async.parallel(task, function(err){
-            respond(302, '/msgcenter/encrypted');
-        });
-    };
-
-    if(0 == phase){
-        output = '确定删除' + ids.length + '条待发送的密文？'
-            + '<form method="POST" action="/' + (new Date().getTime()) + '/msgcenter/encrypted/-/do">'
-            + akashicForm(ids, phase, 'remove')
-            + '<table><tr><td><button type="submit" name="confirm" value="y">确定</button></td>'
-            + '<td><button type="submit" name="confirm" value="n">取消</button></td></tr></table>'
-            + '</form>'
-        ;
-        respond(null, output);
-    } else {
-        if('y' == post.parsed['confirm']){
-            worker();
-        } else {
-            respond(302, '/msgcenter/encrypted');
-        };
-    };
-};
-
+var remove = toolkit.remove;
 
 
 /*
@@ -280,7 +245,7 @@ module.exports = function(queues){
         if(objectIDs.length < 1) return backToIndex();
 
         /* Determine action: send(codebook, ...), or remove */
-        var action = urlcommand;
+        var action = data.get['do'];
         if(undefined != data.post['do']) action = data.post['do'];
         if(!/^(remove|send)$/i.test(action))
             return backToIndex();
@@ -292,10 +257,10 @@ module.exports = function(queues){
 
         switch(action){
             case 'remove':
-                remove(queues, objectIDs, phase, data, respond);
+                remove(queues, objectIDs, phase, data, callback);
                 break;
             case 'send':
-                send(queues, objectIDs, phase, data, respond);
+                send(queues, objectIDs, phase, data, callback);
                 break;
             default:
                 backToIndex();

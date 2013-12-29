@@ -1,4 +1,4 @@
-module.exports = function(){
+function pageToolkit(pageName){
     var self = this;
 
     this.akashicForm = function(ids, phase, action){
@@ -40,4 +40,8 @@ module.exports = function(){
     this.tableDrawer = require('./table.js');
    
     return this;
+};
+
+module.exports = function(pageName){
+    return new pageToolkit(pageName);
 };
