@@ -22,9 +22,11 @@ module.exports = function(){
     
     this.deleteConfirm = function(pageName){
         return function(data){
-            var msgDesc = '消息';
-            if('plaintext' == pageName) msgDesc = '待加密的消息';
-
+            var msgDesc = {
+                plaintext: '待加密的消息',
+                encrypted: '密文',
+            }[pageName] || '消息';
+            
             return '确定删除' + data.ids.length + '条' + msgDesc + '？'
                 + '<form method="POST" action="/msgcenter/' + pageName + '/process?_=' + (new Date().getTime()) + '">'
                 + self.akashicForm(data.ids, data.phase, 'remove')
