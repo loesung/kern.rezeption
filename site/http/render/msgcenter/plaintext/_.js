@@ -1,6 +1,6 @@
-module.exports = function(tableDrawer){
+module.exports = function(toolkit){
     return function(data){
-        var drawer = tableDrawer(
+        var drawer = toolkit.tableDrawer(
             'plaintext'
         );
 

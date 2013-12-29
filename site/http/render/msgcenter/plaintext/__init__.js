@@ -1,11 +1,10 @@
 var router = $.net.urlRouter();
 module.exports = router;
 
-var tableDrawer = require('../table.js'),
-    akashicForm = require('../akashic.js');
+var toolkit = require('../toolkit.js')();
 
 router
-    .handle('', require('./_.js')(tableDrawer))
-    .handle('process', require('./process.js')(akashicForm))
+    .handle('', require('./_.js')(toolkit))
+    .handle('process', require('./process.js')(toolkit))
 ;
 

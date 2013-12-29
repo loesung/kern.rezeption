@@ -1,15 +1,9 @@
-module.exports = function(akashicForm){
+module.exports = function(toolkit){
     return function(data){
         var ret = '' ;
 
         if('remove' == data.type){
-            ret = '确定删除' + data.ids.length + '条待加密的消息？'
-                + '<form method="POST" action="/msgcenter/plaintext/process?_=' + (new Date().getTime()) + '">'
-                + akashicForm(data.ids, data.phase, 'remove')
-                + '<table><tr><td><button type="submit" name="confirm" value="y">确定</button></td>'
-                + '<td><button type="submit" name="confirm" value="n">取消</button></td></tr></table>'
-                + '</form>'
-            ;
+            ret = toolkit.deleteConfirm('plaintext')(data);
         };
 
         if('passphrase' == data.type){
@@ -18,7 +12,7 @@ module.exports = function(akashicForm){
                 + '</font> 条密文。请确定用来保护信息的密码。'
 
                 + '<form method="POST" action="/msgcenter/plaintext/process">'
-                + akashicForm(data.ids, data.phase, 'passphrase')
+                + toolkit.akashicForm(data.ids, data.phase, 'passphrase')
                 + '<table cellspacing="1" cellpadding="0">'
                 + '<tr><td colspan="2">'
                 + '密码必须不少于于20个字符，并且由大写(A-Z)、小写(a-z)、数字(0-9)和特殊字符(键盘上可见符号)混杂而成。<br />'
