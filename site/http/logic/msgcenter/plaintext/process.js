@@ -72,8 +72,8 @@ function passphrase(queues, ids, phase, data, respond){
             ids: ids,
         });
     } else {
-        if('encrypt' != post.parsed.submit){
-            respond(302, '/msgcenter/plaintext/');
+        if('encrypt' != data.post.submit){
+            respond(302, '/msgcenter/plaintext/?_=' + process.hrtime()[1]);
             return;
         };
         var workflow = [], password;

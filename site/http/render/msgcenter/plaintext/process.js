@@ -14,11 +14,11 @@ module.exports = function(akashicForm){
 
         if('passphrase' == data.type){
             ret = '&gt;&gt; 即将使用临时口令加密 <font color="#FF0000">'
-                + ids.length
+                + data.ids.length
                 + '</font> 条密文。请确定用来保护信息的密码。'
 
                 + '<form method="POST" action="/msgcenter/plaintext/process">'
-                + akashicForm(ids, phase, 'passphrase')
+                + akashicForm(data.ids, data.phase, 'passphrase')
                 + '<table cellspacing="1" cellpadding="0">'
                 + '<tr><td colspan="2">'
                 + '密码必须不少于于20个字符，并且由大写(A-Z)、小写(a-z)、数字(0-9)和特殊字符(键盘上可见符号)混杂而成。<br />'
@@ -32,7 +32,7 @@ module.exports = function(akashicForm){
 
                 + '<table><tr>'
                 + '<td><button type="submit" name="submit" value="encrypt" class="navbutton btn-normal">加密</button></td>'
-                + '<td><button type="submit" name="submit" value="cancel" class="navbutton">取消</button></td>'
+                + '<td><button type="submit" name="submit" value="c" class="navbutton">取消</button></td>'
                 + '</tr></table>'
 
                 + '</form>'
