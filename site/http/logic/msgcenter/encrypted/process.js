@@ -260,48 +260,42 @@ function remove(queues, ids, phase, post, respond){
 module.exports = function(queues){
     return function(data, callback){
         function backToIndex(){
-            respond(302, '/msgcenter/encrypted');
+            callback(302, '/msgcenter/encrypted/?_=' + process.hrtime()[1]);
         };
         var isID = /[0-9a-f]{8}\-([0-9a-f]{4}\-){3}[0-9a-f]{12}/i;
-        var isPost = $.types.isObject(post);
 
         /* Determine objects being operated
          * - if by post, read posted body.
          * - read parameter
          * Anyway, use isID.test() to filter all id.
          */
-        var objectIDs = [],
-            parameters = parameter.split('.');
-        for(var i in parameters)
-            if(isID.test(parameters[i]))
-                objectIDs.push(parameters[i].toLowerCase());
-        if(isPost){
-            for(var key in post.parsed){
-                if(isID.test(post.parsed[key]))
-                    objectIDs.push(post.parsed[key].toLowerCase());
-            };
+        var objectIDs = [];
+        for(var i in data.get)
+            if(isID.test(data.get[i]))
+                objectIDs.push(data.get[i].toLowerCase());
+        for(var i in data.post){
+            if(isID.test(data.post[i]))
+                objectIDs.push(data.post[i].toLowerCase());
         };
         if(objectIDs.length < 1) return backToIndex();
 
         /* Determine action: send(codebook, ...), or remove */
         var action = urlcommand;
-        if(isPost) action = post.parsed['do'];
+        if(undefined != data.post['do']) action = data.post['do'];
         if(!/^(remove|send)$/i.test(action))
             return backToIndex();
 
         /* Determine phase of process */
         var phase = 0;
-        if(isPost){
-            if(!isNaN(post.parsed['phase']))
-                phase = Math.round(post.parsed['phase']);
-        };
+        if(!isNaN(data.post['phase']))
+            phase = Math.round(data.post['phase']);
 
         switch(action){
             case 'remove':
-                remove(queues, objectIDs, phase, post, respond);
+                remove(queues, objectIDs, phase, data, respond);
                 break;
             case 'send':
-                send(queues, objectIDs, phase, post, respond);
+                send(queues, objectIDs, phase, data, respond);
                 break;
             default:
                 backToIndex();

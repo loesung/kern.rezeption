@@ -61,55 +61,16 @@ function doneAndRedirectToSend(ids, respond){
     respond(302, '/msgcenter/encrypted/' + ids.join('.') + '/send');
 };
 
-function akashicForm(ids, phase, action){
-    /* Use between phases, to let the server program recall what to do. */
-    var kvs = {
-        'phase': phase + 1,
-        'do': action,
-    };
-    for(var i in ids)
-        kvs['item' + i] = ids[i];
-    output = '';
-    for(var key in kvs){
-        output += 
-            '<input type="hidden" name="'
-            + key + '" value="' + kvs[key] + '" />'
-        ;
-    };
-    return output;
-};
-
 /*
  * Encrypt using passphrase
  */
-function passphrase(queues, ids, phase, post, respond){
-    var output = '';
+function passphrase(queues, ids, phase, data, respond){
     if(0 == phase){
-        output = '&gt;&gt; 即将使用临时口令加密 <font color="#FF0000">'
-            + ids.length
-            + '</font> 条密文。请确定用来保护信息的密码。'
-
-            + '<form method="POST" action="/msgcenter/plaintext/process">'
-            + akashicForm(ids, phase, 'passphrase')
-            + '<table cellspacing="1" cellpadding="0">'
-            + '<tr><td colspan="2">'
-            + '密码必须不少于于20个字符，并且由大写(A-Z)、小写(a-z)、数字(0-9)和特殊字符(键盘上可见符号)混杂而成。<br />'
-            + '解密需要对方输入同样的密码。您可以给出密码提示，不超过140字符，只能由组成密码的可行字符和空格构成。'
-            + '</td></tr>'
-            + '<tr><td>请输入密码：</td><td><input name="password" type="password" size="40"/></td></tr>'
-            + '<tr><td>请再输入一遍确认：</td><td><input name="password2" type="password" size="40"/></td></tr>'
-            + '<tr><td>密码提示：</td>'
-            + '<td><input name="hint" type="text" size="40"/></td></tr>'
-            + '</table>'
-
-            + '<table><tr>'
-            + '<td><button type="submit" name="submit" value="encrypt" class="navbutton btn-normal">加密</button></td>'
-            + '<td><button type="submit" name="submit" value="cancel" class="navbutton">取消</button></td>'
-            + '</tr></table>'
-
-            + '</form>'
-        ;
-        respond(null, output);
+        respond(null, {
+            type: 'passphrase',
+            phase: phase,
+            ids: ids,
+        });
     } else {
         if('encrypt' != post.parsed.submit){
             respond(302, '/msgcenter/plaintext/');
@@ -120,7 +81,7 @@ function passphrase(queues, ids, phase, post, respond){
         // check password validity
         workflow.push(function(cb){
             password = new 
-                $.nodejs.buffer.Buffer(post.parsed.password).toString('hex');
+                $.nodejs.buffer.Buffer(data.post.password).toString('hex');
             cb(null);
         });
         
@@ -179,7 +140,7 @@ function passphrase(queues, ids, phase, post, respond){
 /*
  * Remove selected messages
  */
-function remove(queues, ids, phase, post, respond){
+function remove(queues, ids, phase, data, respond){
     var output = '';
 
     function worker(){
@@ -195,24 +156,21 @@ function remove(queues, ids, phase, post, respond){
             })());
         };
         $.nodejs.async.parallel(task, function(err){
-            doneAndRedirectToSend(ids, respond);
+            respond(302, '/msgcenter/plaintext/?_=' + process.hrtime()[1]);
         });
     };
 
     if(0 == phase){
-        output = '确定删除' + ids.length + '条待加密的消息？'
-            + '<form method="POST" action="/' + (new Date().getTime()) + '/msgcenter/plaintext/-/do">'
-            + akashicForm(ids, phase, 'remove')
-            + '<table><tr><td><button type="submit" name="confirm" value="y">确定</button></td>'
-            + '<td><button type="submit" name="confirm" value="n">取消</button></td></tr></table>'
-            + '</form>'
-        ;
-        respond(null, output);
+        respond(null, {
+            type: 'remove',
+            ids: ids,
+            phase: phase,
+        });
     } else {
-        if('y' == post.parsed['confirm']){
+        if('y' == data.post['confirm']){
             worker();
         } else {
-            respond(302, '/msgcenter/plaintext/');
+            respond(302, '/msgcenter/plaintext/?_=' + process.hrtime()[1]);
         };
     };
 };
@@ -225,10 +183,9 @@ function remove(queues, ids, phase, post, respond){
 module.exports = function(queues){
     return function(data, callback){
         function backToIndex(){
-            callback(302, '/msgcenter/plaintext/');
+            callback(302, '/msgcenter/plaintext/?_=' + process.hrtime()[1]);
         };
         var isID = /^[0-9a-f]{8}\-([0-9a-f]{4}\-){3}[0-9a-f]{12}$/i;
-        var isPost = $.types.isObject(post);
 
         /* Determine objects being operated
          * - if by post, read posted body.
@@ -248,23 +205,21 @@ module.exports = function(queues){
 
         /* Determine action: send(codebook, ...), or remove */
         var action = data.get['do'];
-        if(isPost) action = data.post['do'];
+        if(undefined != data.post['do']) action = data.post['do'];
         if(!/^(remove|passphrase|codebook|sign)$/i.test(action))
             return backToIndex();
 
         /* Determine phase of process */
         var phase = 0;
-        if(isPost){
-            if(!isNaN(data.post['phase']))
-                phase = Math.round(data.post['phase']);
-        };
+        if(!isNaN(data.post['phase']))
+            phase = Math.round(data.post['phase']);
 
         switch(action){
             case 'remove':
-                remove(queues, objectIDs, phase, post, callback);
+                remove(queues, objectIDs, phase, data, callback);
                 break;
             case 'passphrase':
-                passphrase(queues, objectIDs, phase, post, callback); 
+                passphrase(queues, objectIDs, phase, data, callback); 
                 break;
             default:
                 backToIndex();

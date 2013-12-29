@@ -1,6 +1,6 @@
 module.exports = function(pageName){
     return function(data){
-        var output = '<form method="POST" action="/' + (new Date().getTime()) + '/msgcenter/' + pageName + '/process">'
+        var output = '<form method="POST" action="/msgcenter/' + pageName + '/process?_=' + (new Date().getTime()) + '">'
             +'<table class="report" cellspacing="0" cellpadding="0" style="font-size: 9pt">'
             + '<tr class="head">'
             +   '<td width="20%">时间</td>'
