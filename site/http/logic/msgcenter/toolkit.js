@@ -7,6 +7,21 @@ function pageToolkit(pageName){
         respond(302, '/msgcenter/' + pageName + '/?_=' + hrtime);
     };
 
+    this.forwardProcess = function(to, ids, respond){
+        var form = {
+            _: hrtime,
+        };
+        for(var i in ids){
+            form['item' + i] = ids[i];
+        };
+
+        respond(
+            302,
+            '/msgcenter/' + to + '/process?' 
+            + $.nodejs.querystring.stringify(form)
+        );
+    };
+
     this.remove = function(queues, ids, phase, data, respond){
         var output = '';
         var queue = {

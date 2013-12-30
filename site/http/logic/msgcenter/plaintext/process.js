@@ -60,7 +60,7 @@ function encryptAndDeleter(queues, ipc, msgid, comment, type, opts){
 
 function doneAndRedirectToSend(ids, respond){
     "Done encrypting and redirecting to send page.".DEBUG();
-    respond(302, '/msgcenter/encrypted/' + ids.join('.') + '/send');
+    toolkit.forwardProcess('encrypted', ids, respond); 
 };
 
 /*
