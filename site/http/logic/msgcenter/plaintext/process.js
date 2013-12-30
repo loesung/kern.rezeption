@@ -150,9 +150,6 @@ var remove = toolkit.remove;
  */
 module.exports = function(queues){
     return function(data, callback){
-        function backToIndex(){
-            callback(302, '/msgcenter/plaintext/?_=' + process.hrtime()[1]);
-        };
         var isID = /^[0-9a-f]{8}\-([0-9a-f]{4}\-){3}[0-9a-f]{12}$/i;
 
         /* Determine objects being operated
@@ -169,13 +166,13 @@ module.exports = function(queues){
             if(isID.test(data.post[key]))
                 objectIDs.push(data.post[key].toLowerCase());
         };
-        if(objectIDs.length < 1) return backToIndex();
+        if(objectIDs.length < 1) return toolkit.backToIndex(callback);
 
         /* Determine action: send(codebook, ...), or remove */
         var action = data.get['do'];
         if(undefined != data.post['do']) action = data.post['do'];
         if(!/^(remove|passphrase|codebook|sign)$/i.test(action))
-            return backToIndex();
+            return toolkit.backToIndex(callback);
 
         /* Determine phase of process */
         var phase = 0;
@@ -190,7 +187,7 @@ module.exports = function(queues){
                 passphrase(queues, objectIDs, phase, data, callback); 
                 break;
             default:
-                backToIndex();
+                toolkit.backToIndex(callback);
                 break;
         };
     };

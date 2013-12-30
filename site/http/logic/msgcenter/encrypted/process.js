@@ -50,7 +50,7 @@ function send(queues, ids, phase, post, respond){
             nextPhase = false,
             identityIndexed = {};
 
-        if(choice == 'cancel') return respond(302, '/msgcenter/encrypted');
+        if(choice == 'cancel') return toolkit.backToIndex(respond);
         
         // query for newest identity list
         workflow.push(identity.list);
@@ -221,7 +221,7 @@ module.exports = function(queues){
             if(isID.test(data.post[i]))
                 objectIDs.push(data.post[i].toLowerCase());
         };
-        if(objectIDs.length < 1) return backToIndex();
+        if(objectIDs.length < 1) return toolkit.backToIndex(callback);
 
         /* Determine action: send(codebook, ...), or remove */
         var action = data.get['do'];
