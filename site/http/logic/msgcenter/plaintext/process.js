@@ -75,7 +75,7 @@ function passphrase(queues, ids, phase, data, respond){
         });
     } else {
         if('encrypt' != data.post.submit){
-            respond(302, '/msgcenter/plaintext/?_=' + process.hrtime()[1]);
+            toolkit.backToIndex(respond);
             return;
         };
         var workflow = [], password;

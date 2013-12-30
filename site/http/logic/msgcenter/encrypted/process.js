@@ -8,24 +8,6 @@ var toolkit = require('../toolkit.js')('encrypted');
  *  2. Send.
  */
 
-function akashicForm(ids, phase, action){
-    /* Use between phases, to let the server program recall what to do. */
-    var kvs = {
-        'phase': phase + 1,
-        'do': action,
-    };
-    for(var i in ids)
-        kvs['item' + i] = ids[i];
-    output = '';
-    for(var key in kvs){
-        output += 
-            '<input type="hidden" name="'
-            + key + '" value="' + kvs[key] + '" />'
-        ;
-    };
-    return output;
-};
-
 /*
  * Send messages to Botschaft
  */
@@ -224,9 +206,6 @@ var remove = toolkit.remove;
  */
 module.exports = function(queues){
     return function(data, callback){
-        function backToIndex(){
-            callback(302, '/msgcenter/encrypted/?_=' + process.hrtime()[1]);
-        };
         var isID = /[0-9a-f]{8}\-([0-9a-f]{4}\-){3}[0-9a-f]{12}/i;
 
         /* Determine objects being operated
@@ -248,7 +227,7 @@ module.exports = function(queues){
         var action = data.get['do'];
         if(undefined != data.post['do']) action = data.post['do'];
         if(!/^(remove|send)$/i.test(action))
-            return backToIndex();
+            return toolkit.backToIndex(callback);
 
         /* Determine phase of process */
         var phase = 0;
@@ -263,7 +242,7 @@ module.exports = function(queues){
                 send(queues, objectIDs, phase, data, callback);
                 break;
             default:
-                backToIndex();
+                toolkit.backToIndex(callback);
                 break;
         };
     };

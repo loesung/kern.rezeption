@@ -3,7 +3,7 @@ function pageToolkit(pageName){
     
     var hrtime = process.hrtime()[1];
 
-    function backToIndex(respond){
+    this.backToIndex = function(respond){
         respond(302, '/msgcenter/' + pageName + '/?_=' + hrtime);
     };
 
@@ -27,7 +27,7 @@ function pageToolkit(pageName){
                 })());
             };
             $.nodejs.async.parallel(task, function(err){
-                backToIndex(respond);
+                self.backToIndex(respond);
             });
         };
 
@@ -41,7 +41,7 @@ function pageToolkit(pageName){
             if('y' == data.post['confirm']){
                 worker();
             } else {
-                backToIndex(respond);
+                self.backToIndex(respond);
             };
         };
     };
